@@ -29,7 +29,8 @@ namespace EmployeeDirectory.Presentation
                     }
                    if ((message == "Choose Project" || message == "Choose Manager")&&option=="") { return "N/A"; }
                     Console.WriteLine("Enter Valid input");
-                }
+                   if(option== "e") return "exit";
+            }
             }
 
             public string GetLocation()
@@ -65,8 +66,10 @@ namespace EmployeeDirectory.Presentation
             {
                 Console.WriteLine("\nEnter id(TZ0000):");
                 string id = Console.ReadLine()!;
+                if (id == "e") return "exit";
                 while (!Regex.IsMatch(id!, @"^TZ\d{4}$")||id=="")
                 {
+                if (id == "e") return "exit";
                 if (id == "") Console.WriteLine("Id cannot be empty");
                 else 
                     Console.WriteLine("Invalid input. Please enter a valid id of format TZ0000:");
@@ -78,8 +81,10 @@ namespace EmployeeDirectory.Presentation
             {
                 Console.WriteLine("Enter "+type);
                 string input = Console.ReadLine()!;
-                while (!Regex.IsMatch(input!, @"^[a-zA-Z]+(?:[\s-][a-zA-Z]+)*$")||input=="")
+                  if (input == "e") return "exit";
+            while (!Regex.IsMatch(input!, @"^[a-zA-Z]+(?:[\s-][a-zA-Z]+)*$")||input=="")
                 {
+                if (input == "e") return "exit";
                 if (type == "Desciption" && input == "") break;
                     if(input=="")Console.WriteLine(type+" cannot be empty");
                     else
@@ -92,8 +97,10 @@ namespace EmployeeDirectory.Presentation
             {
                 Console.WriteLine("Enter email(name@tezo.com):");
                 string email = Console.ReadLine()!;
-                while (!Regex.IsMatch(email!, @"^[a-zA-Z0-9._%+-]+([^a-zA-Z]*[A-Za-z]){4}.com$") ||email=="")
+                 if (email == "e") return "exit";
+            while (!Regex.IsMatch(email!, @"^[a-zA-Z0-9._%+-]+([^a-zA-Z]*[A-Za-z]){4}.com$") ||email=="")
                 {
+                if (email == "e") return "exit";
                 if (email == "") Console.WriteLine("Email cannot be empty");
                 else
                     Console.WriteLine("Invalid email format. Please enter a valid email(name@Tezo.com):");
@@ -105,8 +112,10 @@ namespace EmployeeDirectory.Presentation
             {
                 Console.WriteLine("Enter phone number:");
                 string phoneNumber = Console.ReadLine()!;
-                while (!Regex.IsMatch(phoneNumber, @"^\d{10}$"))
+                 if (phoneNumber == "e") return "exit";
+            while (!Regex.IsMatch(phoneNumber, @"^\d{10}$"))
                 {
+                if (phoneNumber == "e") return "exit";
                 if (phoneNumber == "") break;
                     Console.WriteLine("Invalid phone number format. Please enter a valid phone number:");
                     phoneNumber = Console.ReadLine()!;
@@ -117,9 +126,11 @@ namespace EmployeeDirectory.Presentation
             {
                 Console.WriteLine($"Enter {type} (dd/MM/yyyy):");
                 string dateStr = Console.ReadLine()!;
-                DateTime date;
+                if (dateStr == "e") return "exit";
+            DateTime date;
                 while (!DateTime.TryParseExact(dateStr, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out date)||dateStr=="")
                 {
+                if (dateStr == "e") return "exit";
                 if (type.Equals("Joining date") && dateStr == "")
                 {
                     Console.WriteLine($"{type} cannot be empty");

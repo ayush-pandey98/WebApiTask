@@ -24,7 +24,7 @@ namespace EmployeeDirectory.Presentation
             {
                 Console.WriteLine("\n1.Employee Management \n2.Role Management \n3.Exit");
                 Console.Write("Enter your choice: ");
-                string choice = Console.ReadLine();
+                string choice = Console.ReadLine()!;
 
                 switch (choice)
                 {
@@ -54,23 +54,36 @@ namespace EmployeeDirectory.Presentation
             {
                 Console.WriteLine("\n1.Add Employee\n2.Display all\n3.Display one\n4.Edit Employee\n5.Delete Employee\n6.Go Back");
                 Console.Write("Enter your choice: ");
-                string choice = Console.ReadLine();
+                string choice = Console.ReadLine()!;
                 switch (choice)
                 {
                     case "1":
+                        Console.WriteLine("To exit the option between selection press 'e'");
                         Console.WriteLine("Enter Employee Details");
                         string id = input.GetId();
+                        if (id == "exit") break;
                         string firstName = input.GetAlpabetInput("First Name");
+                        if (firstName == "exit") break;
                         string lastName = input.GetAlpabetInput("Last Name");
+                        if (lastName == "exit") break;
                         string dob = input.GetDate("Date of birth");
+                        if (dob == "exit") break;
                         string mail = input.GetEmail();
+                        if (mail == "exit") break;
                         string pNumber = input.GetPhone();
+                        if (pNumber == "exit") break;
                         string jDate = input.GetDate("Joining date");
+                        if (jDate == "exit") break;
                         string location = input.GetLocation();
+                        if (location == "exit") break;
                         string jTitle = input.GetRole(location);
+                        if (jTitle == "exit") break;
                         string department = input.GetDepartment(location);
+                        if (department == "exit") break;
                         string manager = input.GetManager();
+                        if (manager == "exit") break;
                         string project = input.GetProject();
+                        if (project == "exit") break;
                         empOperation.AddEmployee(new Employee { Id = id, City = location, Role = jTitle, JoiningDate = jDate, Department = department, FirstName = firstName, LastName = lastName, Dob = dob, Email = mail, Manager = manager, PhoneNumber = pNumber, Project = project });
                         break;
                     case "2":
@@ -83,8 +96,10 @@ namespace EmployeeDirectory.Presentation
                         break;
                      case "4":
                         Console.WriteLine("Edit \n----");
+                        Console.WriteLine("To exit the option between selection press 'e'");
                         showAvailableId();
                         empId = input.GetId();
+                        if (empId == "exit") break;
                         var employee = empOperation.GetEmployee(empId);
                         while (employee == null)
                         {
@@ -98,6 +113,7 @@ namespace EmployeeDirectory.Presentation
                         Console.WriteLine("Delete \n------");
                         showAvailableId();
                         string emp_id = input.GetId();
+                        if(emp_id == "exit") break;
                         empOperation.DeleteEmployee(emp_id);
                         break;
 
@@ -151,15 +167,19 @@ namespace EmployeeDirectory.Presentation
             while (true)
             {
                 Console.WriteLine("\n1.Add Role \n2.View All \n3.Go Back");
-                Console.Write("Choose your choice : ");
-                string choice=Console.ReadLine();
+                Console.Write("Enter your choice : ");
+                string choice=Console.ReadLine()!;
                 switch(choice)
                 {
                     case "1":
                         string roleName = input.GetAlpabetInput("Role Name");
+                        if (roleName == "exit") break;
                         string description = input.GetAlpabetInput("Desciption");
+                        if (description == "exit") break;
                         string location = input.GetAlpabetInput("Location");
+                        if (location == "exit") break;
                         string department = input.GetAlpabetInput("department");
+                        if (department == "exit") break;
                         roleOperation.AddRole(new Models.Roles.Role { Name=roleName,Department=department,Description=description,Location=location});
                         break;
                         case "2":
@@ -194,42 +214,55 @@ namespace EmployeeDirectory.Presentation
             while (true)
             {
                 Console.Write("Choose the informations your want change :");
+                Console.WriteLine("\nTo exit the option between selection press 'e'");
                 Console.WriteLine("\n0.Save  \n1.First Name \n2.Last Name \n3.Date Of Birth \n4.Email \n5.Phone Number \n6.Joining Date \n7.Location \n8.Role \n9.Department \n10.Manager \n11.Project");
                 string choice=Console.ReadLine()!;
+                if (choice == "e") return;
                 switch(choice)
                 {
                     case "0":  break;
                     case "1":string firstName = input.GetAlpabetInput("First Name");
+                        if (firstName == "exit") break;
                         employee.FirstName = firstName;
                         break;
                     case "2":string lastName = input.GetAlpabetInput("Last Name");
+                        if (lastName == "exit") break;
                         employee.LastName= lastName;
                         break;
                     case "3":string dob = input.GetDate("Date of birth");
+                        if (dob == "exit") break;
                         employee.Dob = dob;
                         break;
-                    case "4":string email = input.GetEmail(); 
+                    case "4":string email = input.GetEmail();
+                        if (email == "exit") break;
                         employee.Email = email;
                         break;
                     case "5":string pNumber = input.GetPhone();
+                        if (pNumber == "exit") break;
                         employee.PhoneNumber = pNumber;
                         break;
                     case "6":string joiningDate = input.GetDate("Joining date");
+                        if (joiningDate == "exit") break;
                         employee.JoiningDate= joiningDate;
                         break;
                     case "7": string city = input.GetLocation();
+                        if (city == "exit") break;
                         employee.City = city;
                         break;
                     case "8":string role = input.GetRole(employee.City);
+                        if (role == "exit") break;
                         employee.Role = role;
                         break;
-                    case "9":string department = input.GetDepartment(employee.City); 
+                    case "9":string department = input.GetDepartment(employee.City);
+                        if (department == "exit") break;
                         employee.Department = department;
                         break;
                     case "10":string manager = input.GetManager();
+                        if (manager == "exit") break;
                         employee.Manager = manager;
                         break;
                     case "11": string project = input.GetProject();
+                        if (project == "exit") break;
                         employee.Project = project;
                         break;
                      default: Console.WriteLine("Invalid Input"); break;

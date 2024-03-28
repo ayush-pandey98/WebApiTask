@@ -19,7 +19,7 @@ namespace EmployeeDirectory.Start
             services.AddTransient<IRoleBL, RoleBL>();
             services.AddTransient<Iinput, Input>();
             var provider= services.BuildServiceProvider();
-            PresentationLayer layer = new PresentationLayer(provider.GetService<IEmployeeBL>(),provider.GetService<Iinput>(),provider.GetService<IRoleBL>());
+            PresentationLayer layer = new PresentationLayer(provider.GetService<IEmployeeBL>()!,provider.GetService<Iinput>()!,provider.GetService<IRoleBL>()!);
             layer.Run();
         }
     }
