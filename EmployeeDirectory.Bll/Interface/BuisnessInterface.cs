@@ -8,14 +8,14 @@ namespace EmployeeDirectory.Bll.Interface
          void AddEmployee(Employee employee);
          Employee GetEmployee(string id);
          void DeleteEmployee(string id);
-         void EditEmployee();
+         void EditEmployee(Employee employee, string id);
     }
     public interface IRoleBL
     {
         public void AddRole(Role role);
         public List<Role> GetAllRoles();
         public List<string> GetLocation();
-        public List<string> GetRoleName();
-        public List<string> GetDepartment();
+        public List<string> GetRoleName(string location);
+        public List<string> GetDepartment(string location);
     }
 }

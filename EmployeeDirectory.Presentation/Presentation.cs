@@ -1,5 +1,4 @@
-﻿using EmployeeDirectory.Bll;
-using ConsoleTables;
+﻿using ConsoleTables;
 using EmployeeDirectory.Bll.Interface;
 using EmployeeDirectory.Models;
 using EmployeeDirectory.Presentation.Interface;
@@ -68,8 +67,8 @@ namespace EmployeeDirectory.Presentation
                         string pNumber = input.GetPhone();
                         string jDate = input.GetDate("Joining date");
                         string location = input.GetLocation();
-                        string jTitle = input.GetRole();
-                        string department = input.GetDepartment();
+                        string jTitle = input.GetRole(location);
+                        string department = input.GetDepartment(location);
                         string manager = input.GetManager();
                         string project = input.GetProject();
                         empOperation.AddEmployee(new Employee { Id = id, City = location, Role = jTitle, JoiningDate = jDate, Department = department, FirstName = firstName, LastName = lastName, Dob = dob, Email = mail, Manager = manager, PhoneNumber = pNumber, Project = project });
@@ -83,9 +82,21 @@ namespace EmployeeDirectory.Presentation
                         displaySpecific(empId);
                         break;
                      case "4":
-                        Console.WriteLine("Enter the detail of employee to edit");
+                        Console.WriteLine("Edit \n----");
+                        showAvailableId();
+                        empId = input.GetId();
+                        var employee = empOperation.GetEmployee(empId);
+                        while (employee == null)
+                        {
+                            Console.WriteLine("This employee is not available");
+                            empId = input.GetId();
+                            employee = empOperation.GetEmployee(empId);
+                        }
+                        editEmployee(employee,empId);
                         break;
                     case "5":
+                        Console.WriteLine("Delete \n------");
+                        showAvailableId();
                         string emp_id = input.GetId();
                         empOperation.DeleteEmployee(emp_id);
                         break;
@@ -112,6 +123,21 @@ namespace EmployeeDirectory.Presentation
                 table.AddRow(emp.Id, emp.FirstName + " " + emp.LastName, emp.Role, emp.Department, emp.City, emp.JoiningDate, emp.Manager, emp.Project);
             }
             Console.WriteLine(table.ToString());
+        }
+        public void showAvailableId()
+        {
+            List<Employee> employees= empOperation.GetAllEmployees();
+            if(employees==null || employees.Count==0)
+            {
+                Console.WriteLine("No ids avilable");
+                return;
+            }
+            Console.WriteLine("The avilable ids are:");
+            Console.Write("|");
+            foreach(Employee emp in employees)
+            {
+             Console.Write(" "+emp.Id+" "+"|");
+            }
         }
         public void displaySpecific(string id)
         {
@@ -156,12 +182,61 @@ namespace EmployeeDirectory.Presentation
                 Console.WriteLine("There is no data available");
                 return;
             }
+            var table = new ConsoleTable("Role", "Location", "Description", "Department");
             foreach (Models.Roles.Role role in roles)
             {
-                Console.WriteLine($"\nRole :{role.Name}");
-                Console.WriteLine($"Location :{role.Location}");
-                Console.WriteLine($"Department : {role.Department}\n");
+                table.AddRow(role.Name,role.Location, role.Description,role.Department);
             }
+            Console.WriteLine(table.ToString());
+        }
+        public void editEmployee(Employee employee,string id)
+        {
+            while (true)
+            {
+                Console.Write("Choose the informations your want change :");
+                Console.WriteLine("\n0.Save  \n1.First Name \n2.Last Name \n3.Date Of Birth \n4.Email \n5.Phone Number \n6.Joining Date \n7.Location \n8.Role \n9.Department \n10.Manager \n11.Project");
+                string choice=Console.ReadLine()!;
+                switch(choice)
+                {
+                    case "0":  break;
+                    case "1":string firstName = input.GetAlpabetInput("First Name");
+                        employee.FirstName = firstName;
+                        break;
+                    case "2":string lastName = input.GetAlpabetInput("Last Name");
+                        employee.LastName= lastName;
+                        break;
+                    case "3":string dob = input.GetDate("Date of birth");
+                        employee.Dob = dob;
+                        break;
+                    case "4":string email = input.GetEmail(); 
+                        employee.Email = email;
+                        break;
+                    case "5":string pNumber = input.GetPhone();
+                        employee.PhoneNumber = pNumber;
+                        break;
+                    case "6":string joiningDate = input.GetDate("Joining date");
+                        employee.JoiningDate= joiningDate;
+                        break;
+                    case "7": string city = input.GetLocation();
+                        employee.City = city;
+                        break;
+                    case "8":string role = input.GetRole(employee.City);
+                        employee.Role = role;
+                        break;
+                    case "9":string department = input.GetDepartment(employee.City); 
+                        employee.Department = department;
+                        break;
+                    case "10":string manager = input.GetManager();
+                        employee.Manager = manager;
+                        break;
+                    case "11": string project = input.GetProject();
+                        employee.Project = project;
+                        break;
+                     default: Console.WriteLine("Invalid Input"); break;
+            }
+                if(choice == "0") { break; }
+            }
+            empOperation.EditEmployee(employee,id);
         }
     }
 }

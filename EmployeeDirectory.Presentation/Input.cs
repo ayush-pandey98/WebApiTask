@@ -38,15 +38,15 @@ namespace EmployeeDirectory.Presentation
                 return ChooseOption("Choose Location", locations);
             }
 
-            public string GetRole()
+            public string GetRole(string location)
             {
-                string[] roles = operation.GetRoleName().ToArray();
+                string[] roles = operation.GetRoleName(location).ToArray();
                 return ChooseOption("Choose Role", roles);
             }
 
-            public string GetDepartment()
+            public string GetDepartment(string location)
             {
-                string[] departments = operation.GetDepartment().ToArray();
+                string[] departments = operation.GetDepartment(location).ToArray();
                 return ChooseOption("Choose Department", departments);
             }
 
@@ -63,13 +63,13 @@ namespace EmployeeDirectory.Presentation
             }
             public string GetId()
             {
-                Console.WriteLine("Enter id:");
+                Console.WriteLine("\nEnter id(TZ0000):");
                 string id = Console.ReadLine()!;
                 while (!Regex.IsMatch(id!, @"^TZ\d{4}$")||id=="")
                 {
                 if (id == "") Console.WriteLine("Id cannot be empty");
                 else 
-                    Console.WriteLine("Invalid input. Please enter a valid id of format TZ00000:");
+                    Console.WriteLine("Invalid input. Please enter a valid id of format TZ0000:");
                     id = Console.ReadLine()!;
                 }
                 return id;
@@ -90,9 +90,9 @@ namespace EmployeeDirectory.Presentation
             }
             public string GetEmail()
             {
-                Console.WriteLine("Enter email:");
+                Console.WriteLine("Enter email(name@tezo.com):");
                 string email = Console.ReadLine()!;
-                while (!Regex.IsMatch(email!, @"^[a-zA-Z0-9._%+-]+@Tezo\.com$")||email=="")
+                while (!Regex.IsMatch(email!, @"^[a-zA-Z0-9._%+-]+([^a-zA-Z]*[A-Za-z]){4}.com$") ||email=="")
                 {
                 if (email == "") Console.WriteLine("Email cannot be empty");
                 else

@@ -1,31 +1,30 @@
 ﻿using EmployeeDirectory.Models;
-using EmployeeDirectory.DAL;
 using EmployeeDirectory.Bll.Interface;
 using EmployeeDirectory.DAL.Interface;
 namespace EmployeeDirectory.Bll
 {
     public class EmployeeBL: IEmployeeBL
     {
-        private IEmployeeDAL employees;
-        public EmployeeBL(IEmployeeDAL employees)
+        private IEmployeeDAL empData;
+        public EmployeeBL(IEmployeeDAL empData)
         {
-            this.employees=employees;
+            this.empData=empData;
         }
         public List<Employee> GetAllEmployees()
         {
-            return employees.GetAll();
+            return empData.GetAll();
         }
         public void AddEmployee(Employee employee)
         {
-            employees.Add(employee);
+            empData.Add(employee);
         }
         public Employee GetEmployee(string id)
         {
-            return employees.GetById(id);
+            return empData.GetById(id);
         }
         public void DeleteEmployee(string id)
         {
-            if (employees.Delete(id))
+            if (empData.Delete(id))
             {
                 Console.WriteLine("Employee deleted succesfully");
             }
@@ -34,9 +33,25 @@ namespace EmployeeDirectory.Bll
                 Console.WriteLine("Employee not found");
             }
         }
-        public void EditEmployee()
+        public void EditEmployee(Employee employee,string id)
         {
-
+            var employees=empData.GetAll();
+            foreach (var empp in employees.Where(emp=>emp.Id==id))
+            {
+                empp.FirstName = employee.FirstName;
+                empp.LastName = employee.LastName;
+                empp.PhoneNumber = employee.PhoneNumber;
+                empp.Email = employee.Email;
+                empp.City= employee.City;
+                empp.Role= employee.Role;
+                empp.JoiningDate = employee.JoiningDate;
+                empp.Department = employee.Department;
+                empp.Dob= employee.Dob;
+                empp.JoiningDate= employee.JoiningDate;
+                empp.Manager= employee.Manager;
+                empp.Project= employee.Project;
+            }
+            empData.Set(employees);
         }
 
     }

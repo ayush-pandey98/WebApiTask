@@ -4,8 +4,8 @@ namespace EmployeeDirectory.Presentation.Interface
     public interface Iinput
     {
         string GetLocation();
-        string GetRole();
-        string GetDepartment();
+        string GetRole(string location);
+        string GetDepartment(string location);
         string GetProject();
         string GetManager();
         public string GetId();
