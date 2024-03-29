@@ -64,6 +64,7 @@ namespace EmployeeDirectory.Presentation
             }
             public string GetId()
             {
+                
                 Console.WriteLine("\nEnter id(TZ0000):");
                 string id = Console.ReadLine()!;
                 if (id == "e") return "exit";

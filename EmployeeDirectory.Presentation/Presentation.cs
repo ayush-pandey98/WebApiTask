@@ -6,7 +6,7 @@ namespace EmployeeDirectory.Presentation
 {
     public class PresentationLayer
     {
-        private IEmployeeBL empOperation;
+        private IEmployeeBL _empOperation;
         private Iinput input;
         private IRoleBL roleOperation;
         public PresentationLayer(IEmployeeBL empOperation,Iinput input,IRoleBL roleOperation) { 
@@ -61,6 +61,13 @@ namespace EmployeeDirectory.Presentation
                         Console.WriteLine("To exit the option between selection press 'e'");
                         Console.WriteLine("Enter Employee Details");
                         string id = input.GetId();
+                        var employee = empOperation.GetEmployee(id);
+                        while (employee != null)
+                        {
+                            Console.WriteLine("This employee already available");
+                            id = input.GetId();
+                            employee = empOperation.GetEmployee(id);
+                        }
                         if (id == "exit") break;
                         string firstName = input.GetAlpabetInput("First Name");
                         if (firstName == "exit") break;
@@ -94,7 +101,14 @@ namespace EmployeeDirectory.Presentation
                         Console.Write("Enter the info of employee you want to view");
                         showAvailableId();
                         string empId = input.GetId();
-                        displaySpecific(empId);
+                         employee = empOperation.GetEmployee(empId);
+                        while (employee == null)
+                        {
+                            Console.WriteLine("This employee is not available");
+                            empId = input.GetId();
+                            employee = empOperation.GetEmployee(empId);
+                        }
+                        displaySpecific(employee);
                         break;
                      case "4":
                         Console.WriteLine("Edit \n----");
@@ -102,7 +116,7 @@ namespace EmployeeDirectory.Presentation
                         showAvailableId();
                         empId = input.GetId();
                         if (empId == "exit") break;
-                        var employee = empOperation.GetEmployee(empId);
+                         employee = empOperation.GetEmployee(empId);
                         while (employee == null)
                         {
                             Console.WriteLine("This employee is not available");
@@ -115,7 +129,14 @@ namespace EmployeeDirectory.Presentation
                         Console.WriteLine("Delete \n------");
                         showAvailableId();
                         string emp_id = input.GetId();
-                        if(emp_id == "exit") break;
+                        employee = empOperation.GetEmployee(emp_id);
+                        while (employee == null)
+                        {
+                            Console.WriteLine("This employee is not available");
+                            empId = input.GetId();
+                            employee = empOperation.GetEmployee(emp_id);
+                        }
+                        if (emp_id == "exit") break;
                         empOperation.DeleteEmployee(emp_id);
                         break;
 
@@ -157,10 +178,11 @@ namespace EmployeeDirectory.Presentation
              Console.Write(" "+emp.Id+" "+"|");
             }
         }
-        public void displaySpecific(string id)
+        public void displaySpecific(Employee emp)
         {
-            Employee emp = empOperation.GetEmployee(id);
-            Console.WriteLine($"Name : {emp.FirstName} {emp.LastName} \n Id: {emp.Id} \n:Role:{emp.Role}\nDepartment:{emp.Department}\nLocation: {emp.City} \nJoining Date: {emp.JoiningDate}\nManager:{emp.Manager}\nDate of Birth:{emp.Dob}\nMobile Number:{emp.PhoneNumber}");
+            var table = new ConsoleTable("Name","ID","Role","Department","Location","Joining Date","Manger","Date Of Birth","Phone Number","Project");
+            table.AddRow(emp.FirstName+" "+emp.LastName,emp.Id,emp.Role,emp.Department,emp.City,emp.JoiningDate,emp.Manager,emp.Dob,emp.PhoneNumber,emp.Project);
+            Console.WriteLine(table.ToString());
         }
         public void RoleManagment()
         {
