@@ -90,7 +90,9 @@ namespace EmployeeDirectory.Presentation
                         DisplayAllEmployees();
                         break;
                     case "3":
+                        Console.WriteLine("Display Specific \n----");
                         Console.Write("Enter the info of employee you want to view");
+                        showAvailableId();
                         string empId = input.GetId();
                         displaySpecific(empId);
                         break;
@@ -148,7 +150,7 @@ namespace EmployeeDirectory.Presentation
                 Console.WriteLine("No ids avilable");
                 return;
             }
-            Console.WriteLine("The avilable ids are:");
+            Console.WriteLine("\nThe avilable ids are:");
             Console.Write("|");
             foreach(Employee emp in employees)
             {
