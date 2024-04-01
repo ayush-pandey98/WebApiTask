@@ -1,15 +1,8 @@
 ﻿using EmployeeDirectory.Models;
 using EmployeeDirectory.Models.Roles;
-namespace EmployeeDirectory.Bll.Interface
+namespace EmployeeDirectory.Bll.Interface.roleBL
 {
-   public interface IEmployeeBL
-    {
-         List<Employee> GetAllEmployees();
-         void AddEmployee(Employee employee);
-         Employee GetEmployee(string id);
-         void DeleteEmployee(string id);
-         void EditEmployee(Employee employee, string id);
-    }
+  
     public interface IRoleBL
     {
         public void AddRole(Role role);

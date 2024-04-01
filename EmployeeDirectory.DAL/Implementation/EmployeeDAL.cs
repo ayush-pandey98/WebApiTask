@@ -1,13 +1,13 @@
 ﻿using EmployeeDirectory.Models;
 using Newtonsoft.Json;
-using EmployeeDirectory.DAL.Interface;
+using EmployeeDirectory.DAL.Interface.employeeDAL;
 namespace EmployeeDirectory.DAL
 {
     public class EmployeeDAL:IEmployeeDAL
     {
         public List<Employee> GetAll()
         {
-            string employeeData = File.ReadAllText(@"C:\Users\ayush.p\Desktop\EmployeeDirecroty_Data\employees.json");
+            string employeeData = File.ReadAllText(@"C:\Users\ayush.p\source\repos\EmployeeDirectory.Start\Employee.json");
             List<Employee> employees = JsonConvert.DeserializeObject<List<Employee>>(employeeData)!;
             return employees;
         }
@@ -37,7 +37,7 @@ namespace EmployeeDirectory.DAL
         public void Set(List<Employee> employees)
         {
             string json = JsonConvert.SerializeObject(employees);
-            File.WriteAllText(@"C:\Users\ayush.p\Desktop\EmployeeDirecroty_Data\employees.json", json);
+            File.WriteAllText(@"C:\Users\ayush.p\source\repos\EmployeeDirectory.Start\Employee.json", json);
         }
     }
 }

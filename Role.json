@@ -1,0 +1,38 @@
+[
+    {
+        "Name": "Back-End devloper",
+        "Description": "He takes care of all backend stuff",
+        "Location": "Pune",
+        "Department": "PE"
+    },
+    {
+        "Name": "Front-End Devloper",
+        "Description": "He takes care of all front-end stuffs",
+        "Location": "Mumbai",
+        "Department": "PE"
+    },
+    {
+        "Name": "UI Designer",
+        "Description": "All the UI stuff is taken care by him",
+        "Location": "Delhi",
+        "Department": "UIUX"
+    },
+    {
+        "Name": "Data Analyst",
+        "Description": "",
+        "Location": "Durg",
+        "Department": "Data Engineering"
+    },
+    {
+        "Name": "UX Designer",
+        "Description": "",
+        "Location": "Pune",
+        "Department": "UIUX"
+    },
+    {
+        "Name": "Software tester",
+        "Description": "",
+        "Location": "Pune",
+        "Department": "QA"
+    }
+]

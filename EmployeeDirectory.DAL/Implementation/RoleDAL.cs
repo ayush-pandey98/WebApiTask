@@ -1,4 +1,4 @@
-﻿using EmployeeDirectory.DAL.Interface;
+﻿using EmployeeDirectory.DAL.Interface.roleDAL;
 using EmployeeDirectory.Models.Roles;
 using Newtonsoft.Json;
 
@@ -8,7 +8,7 @@ namespace EmployeeDirectory.DAL.Roles
     {
         public List<Role> GetAll()
         {
-            string RoleData = File.ReadAllText(@"C:\Users\ayush.p\Desktop\EmployeeDirecroty_Data\Roles.json");
+            string RoleData = File.ReadAllText(@"C:\Users\ayush.p\source\repos\EmployeeDirectory.Start\Role.json");
             List<Role> roles = JsonConvert.DeserializeObject<List<Role>>(RoleData)!;
             return roles;
         }
@@ -27,7 +27,7 @@ namespace EmployeeDirectory.DAL.Roles
         public void Set(List<Role> roles)
         {
             string json = JsonConvert.SerializeObject(roles);
-            File.WriteAllText(@"C:\Users\ayush.p\Desktop\EmployeeDirecroty_Data\Roles.json", json);
+            File.WriteAllText(@"C:\Users\ayush.p\source\repos\EmployeeDirectory.Start\Role.json", json);
         }
 
 

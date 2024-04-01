@@ -1,30 +1,30 @@
 ﻿using EmployeeDirectory.Models;
-using EmployeeDirectory.Bll.Interface;
-using EmployeeDirectory.DAL.Interface;
+using EmployeeDirectory.BLL.Interface.employeeBL;
+using EmployeeDirectory.DAL.Interface.employeeDAL;
 namespace EmployeeDirectory.Bll
 {
-    public class EmployeeBL: IEmployeeBL
+    public class EmployeeBL:IEmployeeBL
     {
-        private IEmployeeDAL empData;
-        public EmployeeBL(IEmployeeDAL empData)
+        private IEmployeeDAL _employeeDAL;
+        public EmployeeBL(IEmployeeDAL _employeeDAL)
         {
-            this.empData=empData;
+            this._employeeDAL=_employeeDAL;
         }
         public List<Employee> GetAllEmployees()
         {
-            return empData.GetAll();
+            return _employeeDAL.GetAll();
         }
         public void AddEmployee(Employee employee)
         {
-            empData.Add(employee);
+            _employeeDAL.Add(employee);
         }
         public Employee GetEmployee(string id)
         {
-            return empData.GetById(id);
+            return _employeeDAL.GetById(id);
         }
         public void DeleteEmployee(string id)
         {
-            if (empData.Delete(id))
+            if (_employeeDAL.Delete(id))
             {
                 Console.WriteLine("Employee deleted succesfully");
             }
@@ -35,7 +35,7 @@ namespace EmployeeDirectory.Bll
         }
         public void EditEmployee(Employee employee,string id)
         {
-            var employees=empData.GetAll();
+            var employees=_employeeDAL.GetAll();
             foreach (var empp in employees.Where(emp=>emp.Id==id))
             {
                 empp.FirstName = employee.FirstName;
@@ -51,7 +51,7 @@ namespace EmployeeDirectory.Bll
                 empp.Manager= employee.Manager;
                 empp.Project= employee.Project;
             }
-            empData.Set(employees);
+            _employeeDAL.Set(employees);
         }
 
     }

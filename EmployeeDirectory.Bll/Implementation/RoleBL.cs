@@ -1,27 +1,27 @@
 ﻿using EmployeeDirectory.Models.Roles;
-using EmployeeDirectory.Bll.Interface;
-using EmployeeDirectory.DAL.Interface;
+using EmployeeDirectory.Bll.Interface.roleBL;
+using EmployeeDirectory.DAL.Interface.roleDAL;
 namespace EmployeeDirectory.Bll
 {
-    public class RoleBL:IRoleBL
+    public class RoleBL: IRoleBL
     {
-       private IRoleDAL roles;
-        public RoleBL(IRoleDAL roles)
+       private IRoleDAL _roleDAL;
+        public RoleBL(IRoleDAL _roleDAL)
         {
-          this.roles = roles;
+          this._roleDAL = _roleDAL;
         } 
         public void AddRole(Role role)
         {
-            roles.Add(role);
+            _roleDAL.Add(role);
         }
         public List<Role> GetAllRoles()
         {
-            return roles.GetAll();
+            return _roleDAL.GetAll();
         }
         public List<string> GetLocation()
         {
             List<string> locations = new List<string>();
-            var allRoles= roles.GetAll();
+            var allRoles= _roleDAL.GetAll();
             foreach(Role role in allRoles) {
                 if (!locations.Contains(role.Location))
                 {
@@ -33,7 +33,7 @@ namespace EmployeeDirectory.Bll
         public List<string> GetRoleName(string location)
         {
             List<string> roleName = new List<string>();
-            var allRoles = roles.GetAll();
+            var allRoles = _roleDAL.GetAll();
             foreach (Role role in allRoles)
             {
                 if (!roleName.Contains(role.Name) && role.Location.Equals(location))
@@ -46,7 +46,7 @@ namespace EmployeeDirectory.Bll
         public List <string> GetDepartment(string location)
         {
             List<string> department = new List<string>();
-            var allRoles = roles.GetAll();
+            var allRoles = _roleDAL.GetAll();
             foreach (Role role in allRoles)
             {
                 if (!department.Contains(role.Department)&&role.Location.Equals(location))

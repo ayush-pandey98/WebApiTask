@@ -1,0 +1,72 @@
+[
+    {
+        "Id": "TZ2323",
+        "FirstName": "Bagira",
+        "LastName": "Charan",
+        "Email": "ram@Tezo.com",
+        "Dob": "2013-11-22",
+        "PhoneNumber": "4445555789",
+        "Role": "Data Analyst",
+        "City": "Delhi",
+        "JoiningDate": "2023-12-23",
+        "Department": "Data Engineering",
+        "Manager": "Manager 1",
+        "Project": "Project 2"
+    },
+    {
+        "Id": "TZ0202",
+        "FirstName": "Ram",
+        "LastName": "Sen",
+        "Email": "ram@Tezo.com",
+        "Dob": "01/01/0001",
+        "PhoneNumber": "",
+        "Role": "Back-End devloper",
+        "City": "Pune",
+        "JoiningDate": "12/12/2022",
+        "Department": "PE",
+        "Manager": "N/A",
+        "Project": "N/A"
+    },
+    {
+        "Id": "TZ3333",
+        "FirstName": "sdhfks",
+        "LastName": "djkhfks",
+        "Email": "sfsf@Tezo.com",
+        "Dob": "12/12/1998",
+        "PhoneNumber": "9999999999",
+        "Role": "Front-End Devloper",
+        "City": "Durg",
+        "JoiningDate": "12/12/9999",
+        "Department": "PE",
+        "Manager": "Manager 2",
+        "Project": "Project 1"
+    },
+    {
+        "Id": "TZ4444",
+        "FirstName": "hkjdfshkj",
+        "LastName": "hkjdsfui",
+        "Email": "dkjfhk@Tezo.com",
+        "Dob": "12/12/2998",
+        "PhoneNumber": "7576575777",
+        "Role": "Data Analyst",
+        "City": "lov",
+        "JoiningDate": "12/12/9988",
+        "Department": "Data Engineering",
+        "Manager": "Manager 3",
+        "Project": "Project 1"
+    },
+    {
+        "Id": "TZ2345",
+        "FirstName": "Ayush",
+        "LastName": "Pandey",
+        "Email": "ayush@tezo.com",
+        "Dob": "12/12/2003",
+        "PhoneNumber": "3456789012",
+        "Role": "UX Designer",
+        "City": "Pune",
+        "JoiningDate": "12/12/2024",
+        "Department": "UIUX",
+        "Manager": "Manager 1",
+        "Project": "Project 1"
+    }
+]
