@@ -3,14 +3,20 @@ using System.Text.RegularExpressions;
 using EmployeeDirectory.Presentation.Interface;
 using EmployeeDirectory.Bll.Interface.roleBL;
 using EmployeeDirectory.BLL.Interface.location;
+using EmployeeDirectory.BLL.Interface.departmentBL;
+using EmployeeDirectory.Models.location;
 namespace EmployeeDirectory.Presentation
     {
     public class Input : Iinput
         {
         private IRoleBL _roleBL;
-        public Input(IRoleBL _roleBL)
+        private ILocationBL _locationBL;
+        private IDepartmentBL _departmentBL;
+        public Input(IRoleBL _roleBL,ILocationBL _locationBL,IDepartmentBL _departmentBL)
         {
             this._roleBL = _roleBL;
+            this._locationBL = _locationBL;
+            this._departmentBL = _departmentBL;
         }
         private string ChooseOption(string message, string[] options)
             {
@@ -33,8 +39,7 @@ namespace EmployeeDirectory.Presentation
                    if(option== "0") return "exit";
             }
             }
-
-            public string GetLocation()
+        public string GetLocation()
             {
                 string[] locations = _roleBL.GetLocation().ToArray();
                 return ChooseOption("Choose Location", locations);
@@ -109,7 +114,45 @@ namespace EmployeeDirectory.Presentation
                 }
                 return email;
             }
-            public string GetPhone()
+           public int GetAllLocation()
+           {
+             var locations=_locationBL.GetAllLocation();
+            Console.WriteLine("Choose Location");
+            for (int i = 0; i < locations.Count; i++)
+            {
+                Console.WriteLine($"{i + 1}. {locations[i].Value}");
+            }
+            while (true)
+            {
+                string option = Console.ReadLine()!;
+                int optionIndex;
+
+                if (int.TryParse(option, out optionIndex) && optionIndex >= 1 && optionIndex <= locations.Count)
+                {
+                    return locations[optionIndex - 1].Id;
+                }
+            }
+        }
+        public int GetAllDepartment()
+        {
+            var departments=_departmentBL.GetAllDepartment();
+            Console.WriteLine("Choose Location");
+            for (int i = 0; i < departments.Count; i++)
+            {
+                Console.WriteLine($"{i + 1}. {departments[i].Value}");
+            }
+            while (true)
+            {
+                string option = Console.ReadLine()!;
+                int optionIndex;
+
+                if (int.TryParse(option, out optionIndex) && optionIndex >= 1 && optionIndex <= departments.Count)
+                {
+                    return departments[optionIndex - 1].Id;
+                }
+            }
+        }
+        public string GetPhone()
             {
                 Console.WriteLine("Enter phone number:");
                 string phoneNumber = Console.ReadLine()!;

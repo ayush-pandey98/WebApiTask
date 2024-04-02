@@ -206,7 +206,7 @@ namespace EmployeeDirectory.Presentation
                         if (roleName == "exit") break;
                         string description = _input.GetAlpabetInput("Desciption");
                         if (description == "exit") break;
-                        string location = _input.GetAlpabetInput("Location");
+                        string location = _input.GetAlpabetInput("location");
                         if (location == "exit") break;
                         string department = _input.GetAlpabetInput("department");
                         if (department == "exit") break;
@@ -403,6 +403,7 @@ namespace EmployeeDirectory.Presentation
         }
         void DisplayAllDepartments()
         {
+            _input.GetAllLocation();
             var departments = _departmentBL.GetAllDepartment();
             if(departments==null)
             {
@@ -420,5 +421,6 @@ namespace EmployeeDirectory.Presentation
             if (departments == null) return 0;
             return departments[departments.Count - 1].Id + 1;
         }
+        
     }
 }

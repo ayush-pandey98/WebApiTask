@@ -18,7 +18,7 @@ namespace EmployeeDirectory.Bll
         {
             return _roleDAL.GetAll();
         }
-        public List<string> GetLocation()
+       public List<string> GetLocation()
         {
             List<string> locations = new List<string>();
             var allRoles= _roleDAL.GetAll();
