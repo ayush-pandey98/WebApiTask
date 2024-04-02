@@ -9,9 +9,9 @@
             public required string Dob { get; set; }
             public required string PhoneNumber { get; set; }
             public required string Role { get; set; }
-            public required string City { get; set; }
+            public required int City { get; set; }
             public required string JoiningDate { get; set; }
-            public required string Department { get; set; }
+            public required int Department { get; set; }
             public required string Manager { get; set; }
             public required string Project { get; set; }
         }

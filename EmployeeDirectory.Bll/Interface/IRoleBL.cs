@@ -7,8 +7,8 @@ namespace EmployeeDirectory.Bll.Interface.roleBL
     {
         public void AddRole(Role role);
         public List<Role> GetAllRoles();
-       public List<string> GetLocation();
-        public List<string> GetRoleName(string location);
-       public List<string> GetDepartment(string location);
+       public List<int> GetLocation(string roleName);
+        public List<string> GetRoleName();
+       public List<int> GetDepartment(string roleName);
     }
 }

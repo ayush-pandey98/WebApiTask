@@ -18,38 +18,38 @@ namespace EmployeeDirectory.Bll
         {
             return _roleDAL.GetAll();
         }
-       public List<string> GetLocation()
+       public List<int> GetLocation(string roleName)
         {
-            List<string> locations = new List<string>();
+            List<int> locations = new List<int>();
             var allRoles= _roleDAL.GetAll();
             foreach(Role role in allRoles) {
-                if (!locations.Contains(role.Location))
+                if (!locations.Contains(role.Location)&& role.Name.Equals(roleName))
                 {
                     locations.Add(role.Location);
                 }
             }
             return locations;
         }
-        public List<string> GetRoleName(string location)
+        public List<string> GetRoleName()
         {
             List<string> roleName = new List<string>();
             var allRoles = _roleDAL.GetAll();
             foreach (Role role in allRoles)
             {
-                if (!roleName.Contains(role.Name) && role.Location.Equals(location))
+                if (!roleName.Contains(role.Name))
                 {
                     roleName.Add(role.Name);
                 }
             }
             return roleName;
         }
-        public List <string> GetDepartment(string location)
+        public List <int> GetDepartment(string roleName)
         {
-            List<string> department = new List<string>();
+            List<int> department = new List<int>();
             var allRoles = _roleDAL.GetAll();
             foreach (Role role in allRoles)
             {
-                if (!department.Contains(role.Department)&&role.Location.Equals(location))
+                if (!department.Contains(role.Department)&&role.Name.Equals(roleName))
                 {
                     department.Add(role.Department);
                 }

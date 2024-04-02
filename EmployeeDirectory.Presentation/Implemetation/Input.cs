@@ -39,23 +39,51 @@ namespace EmployeeDirectory.Presentation
                    if(option== "0") return "exit";
             }
             }
-        public string GetLocation()
-            {
-                string[] locations = _roleBL.GetLocation().ToArray();
-                return ChooseOption("Choose Location", locations);
-            }
+              public int GetRoleSpecificLocation(string roleName)
+                {
+                  int[] locations = _roleBL.GetLocation(roleName).ToArray();
+                  Console.WriteLine("Choose Location");
+                 for (int i = 0; i < locations.Length; i++)
+                {
+                Console.WriteLine($"{i + 1}. {_locationBL.GetLocationById(locations[i])}");
+                }
 
-            public string GetRole(string location)
+               int optionIndex;
+               while (true)
+                {
+                string option = Console.ReadLine()!;
+                if (int.TryParse(option, out optionIndex) && optionIndex >= 1 && optionIndex <= locations.Length)
+                {
+                    return locations[optionIndex - 1];
+                }
+                }
+               }
+
+            public string GetRole()
             {
-                string[] roles = _roleBL.GetRoleName(location).ToArray();
+                string[] roles = _roleBL.GetRoleName().ToArray();
                 return ChooseOption("Choose Role", roles);
             }
 
-            public string GetDepartment(string location)
+            public int GetRoleSpecificDepartment(string roleName)
             {
-                string[] departments = _roleBL.GetDepartment(location).ToArray();
-                return ChooseOption("Choose Department", departments);
+                Console.WriteLine("Choose Department");
+                int[] departments = _roleBL.GetDepartment(roleName).ToArray();
+            for (int i = 0; i < departments.Length; i++)
+            {
+                Console.WriteLine($"{i + 1}. {_departmentBL.GetDepartmentById(departments[i])}");
             }
+
+            int optionIndex;
+            while (true)
+            {
+                string option = Console.ReadLine()!;
+                if (int.TryParse(option, out optionIndex) && optionIndex >= 1 && optionIndex <= departments.Length)
+                {
+                    return departments[optionIndex - 1];
+                }
+            }
+        }
 
             public string GetProject()
             {

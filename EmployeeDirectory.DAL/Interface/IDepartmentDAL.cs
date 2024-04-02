@@ -7,5 +7,6 @@ namespace EmployeeDirectory.DAL.Interface.departmentDAL
         public List<Department> GetAll();
         public void Set(List<Department> departments);
         public void Add(Department department);
+        
     }
 }

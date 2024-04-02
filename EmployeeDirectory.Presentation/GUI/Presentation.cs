@@ -42,6 +42,7 @@ namespace EmployeeDirectory.Presentation
             {
                 for(int i=0;i<mainMenueOption.Count;i++)
                 {
+                    if (i == 0) { Console.WriteLine(); }
                     Console.WriteLine($"{i}.{mainMenueOption[i]}");
                 }
                 Console.Write("Enter your choice: ");
@@ -81,6 +82,7 @@ namespace EmployeeDirectory.Presentation
             {
                 for(int i=0; i < employeeManagmentOption.Count; i++)
                 {
+                    if (i == 0) { Console.WriteLine(); }
                     Console.WriteLine($"{i}.{employeeManagmentOption[i]}");
                 }
                 Console.Write("Enter your choice: ");
@@ -106,12 +108,12 @@ namespace EmployeeDirectory.Presentation
                         if (pNumber == "exit") break;
                         string jDate = _input.GetDate("Joining date");
                         if (jDate == "exit") break;
-                        string location = _input.GetLocation();
-                        if (location == "exit") break;
-                        string jTitle = _input.GetRole(location);
+                             string jTitle = _input.GetRole();
                         if (jTitle == "exit") break;
-                        string department = _input.GetDepartment(location);
-                        if (department == "exit") break;
+                        int location = _input.GetRoleSpecificLocation(jTitle);
+                        if (location == -1) break;
+                        int department = _input.GetRoleSpecificDepartment(jTitle);
+                        if (department == -1) break;
                         string manager = _input.GetManager();
                         if (manager == "exit") break;
                         string project = _input.GetProject();
@@ -160,7 +162,7 @@ namespace EmployeeDirectory.Presentation
             var table = new ConsoleTable("ID", "Name", "Role", "Department", "Location", "Joining Date", "Manager", "Project");
             foreach (Employee emp in employees)
             {
-                table.AddRow(emp.Id, emp.FirstName + " " + emp.LastName, emp.Role, emp.Department, emp.City, emp.JoiningDate, emp.Manager, emp.Project);
+                table.AddRow(emp.Id, emp.FirstName + " " + emp.LastName, emp.Role, _departmentBL.GetDepartmentById(emp.Department), _locationBL.GetLocationById(emp.City), emp.JoiningDate, emp.Manager, emp.Project);
             }
             Console.WriteLine(table.ToString());
         }
@@ -182,7 +184,7 @@ namespace EmployeeDirectory.Presentation
         public void displaySpecific(Employee emp)
         {
             var table = new ConsoleTable("Name","ID","Role","Department","Location","Joining Date","Manger","Date Of Birth","Phone Number","Project");
-            table.AddRow(emp.FirstName+" "+emp.LastName,emp.Id,emp.Role,emp.Department,emp.City,emp.JoiningDate,emp.Manager,emp.Dob,emp.PhoneNumber,emp.Project);
+            table.AddRow(emp.FirstName+" "+emp.LastName,emp.Id,emp.Role,_departmentBL.GetDepartmentById(emp.Department), _locationBL.GetLocationById(emp.City),emp.JoiningDate,emp.Manager,emp.Dob,emp.PhoneNumber,emp.Project);
             Console.WriteLine(table.ToString());
         }
         public void RoleManagment()
@@ -193,7 +195,8 @@ namespace EmployeeDirectory.Presentation
             {
                 for(int i = 0; i < roleManagmentOption.Count; i++)
                 {
-                    Console.WriteLine($"{i}.{roleManagmentOption}");
+                    if (i == 0) { Console.WriteLine(); }
+                    Console.WriteLine($"{i}.{roleManagmentOption[i]}");
                 }
                 Console.Write("Enter your choice : ");
                 string choice=Console.ReadLine()!;
@@ -206,10 +209,10 @@ namespace EmployeeDirectory.Presentation
                         if (roleName == "exit") break;
                         string description = _input.GetAlpabetInput("Desciption");
                         if (description == "exit") break;
-                        string location = _input.GetAlpabetInput("location");
-                        if (location == "exit") break;
-                        string department = _input.GetAlpabetInput("department");
-                        if (department == "exit") break;
+                        int location = _input.GetAllLocation();
+                        if (location == -1) break;
+                        int department = _input.GetAllDepartment();
+                        if (department == -1) break;
                         _roleBL.AddRole(new Models.Roles.Role { Name=roleName,Department=department,Description=description,Location=location});
                         break;
                         case "2":
@@ -233,7 +236,7 @@ namespace EmployeeDirectory.Presentation
             var table = new ConsoleTable("Role", "Location", "Description", "Department");
             foreach (Models.Roles.Role role in roles)
             {
-                table.AddRow(role.Name,role.Location, role.Description,role.Department);
+                table.AddRow(role.Name,_locationBL.GetLocationById(role.Location), role.Description, _departmentBL.GetDepartmentById(role.Department));
             }
             Console.WriteLine(table.ToString());
         }
@@ -245,6 +248,7 @@ namespace EmployeeDirectory.Presentation
                 Console.WriteLine("\nTo exit the option between selection press '0'");
                 for(int i = 0;i<editEmpOptions.Count;i++)
                 {
+                    if (i == 0) { Console.WriteLine(); }
                     Console.WriteLine($"{i}.{editEmpOptions[i]}");
                 }
                 string choice=Console.ReadLine()!;
@@ -276,16 +280,17 @@ namespace EmployeeDirectory.Presentation
                         if (joiningDate == "exit") break;
                         employee.JoiningDate= joiningDate;
                         break;
-                    case "7": string city = _input.GetLocation();
-                        if (city == "exit") break;
-                        employee.City = city;
-                        break;
-                    case "8":string role = _input.GetRole(employee.City);
+                    case "8":
+                        string role = _input.GetRole();
                         if (role == "exit") break;
                         employee.Role = role;
                         break;
-                    case "9":string department = _input.GetDepartment(employee.City);
-                        if (department == "exit") break;
+                    case "7": int city = _input.GetRoleSpecificLocation(employee.Role);
+                        if (city == -1) break;
+                        employee.City = city;
+                        break;
+                    case "9":int department = _input.GetRoleSpecificDepartment(employee.Role);
+                        if (department == 0) break;
                         employee.Department = department;
                         break;
                     case "10":string manager = _input.GetManager();

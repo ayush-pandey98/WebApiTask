@@ -5,7 +5,7 @@ namespace EmployeeDirectory.Models.Roles
     {
         public required string Name {  get; set; }
         public required string Description { get; set; }
-        public required string Location {  get; set; }
-        public required string Department {  get; set; } 
+        public required int Location {  get; set; }
+        public required int Department {  get; set; } 
     }
 }

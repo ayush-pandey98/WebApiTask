@@ -14,12 +14,14 @@ namespace EmployeeDirectory.DAL
         public void Add(Employee employee)
         {
             var employees = GetAll();
+            if(employees == null) { employees = new List<Employee>(); }
             employees.Add(employee);
             Set(employees);
         }
         public Employee GetById(string id)
         {
             var employees = GetAll();
+            if (employees == null) return null;
             return employees.Find(emp => emp.Id == id)!;
         }
         public bool Delete(string id)
