@@ -4,7 +4,6 @@ using EmployeeDirectory.Presentation.Interface;
 using EmployeeDirectory.Bll.Interface.roleBL;
 using EmployeeDirectory.BLL.Interface.location;
 using EmployeeDirectory.BLL.Interface.departmentBL;
-using EmployeeDirectory.Models.location;
 namespace EmployeeDirectory.Presentation
     {
     public class Input : Iinput
@@ -12,13 +11,13 @@ namespace EmployeeDirectory.Presentation
         private IRoleBL _roleBL;
         private ILocationBL _locationBL;
         private IDepartmentBL _departmentBL;
-        public Input(IRoleBL _roleBL,ILocationBL _locationBL,IDepartmentBL _departmentBL)
-        {
-            this._roleBL = _roleBL;
-            this._locationBL = _locationBL;
-            this._departmentBL = _departmentBL;
-        }
-        private string ChooseOption(string message, string[] options)
+            public Input(IRoleBL _roleBL,ILocationBL _locationBL,IDepartmentBL _departmentBL)
+             {
+              this._roleBL = _roleBL;
+              this._locationBL = _locationBL;
+              this._departmentBL = _departmentBL;
+             }
+            private string ChooseOption(string message, string[] options)
             {
                 Console.WriteLine(message);
                 for (int i = 0; i < options.Length; i++)
@@ -39,7 +38,7 @@ namespace EmployeeDirectory.Presentation
                    if(option== "0") return "exit";
             }
             }
-              public int GetRoleSpecificLocation(string roleName)
+            public int GetRoleSpecificLocation(string roleName)
                 {
                   int[] locations = _roleBL.GetLocation(roleName).ToArray();
                   Console.WriteLine("Choose Location");
@@ -58,39 +57,35 @@ namespace EmployeeDirectory.Presentation
                 }
                 }
                }
-
             public string GetRole()
             {
                 string[] roles = _roleBL.GetRoleName().ToArray();
                 return ChooseOption("Choose Role", roles);
             }
-
             public int GetRoleSpecificDepartment(string roleName)
             {
                 Console.WriteLine("Choose Department");
                 int[] departments = _roleBL.GetDepartment(roleName).ToArray();
-            for (int i = 0; i < departments.Length; i++)
-            {
-                Console.WriteLine($"{i + 1}. {_departmentBL.GetDepartmentById(departments[i])}");
-            }
+                  for (int i = 0; i < departments.Length; i++)
+                   {
+                    Console.WriteLine($"{i + 1}. {_departmentBL.GetDepartmentById(departments[i])}");
+                   }
 
-            int optionIndex;
-            while (true)
-            {
-                string option = Console.ReadLine()!;
-                if (int.TryParse(option, out optionIndex) && optionIndex >= 1 && optionIndex <= departments.Length)
-                {
-                    return departments[optionIndex - 1];
-                }
-            }
-        }
-
+                 int optionIndex;
+                  while (true)
+                   {
+                    string option = Console.ReadLine()!;
+                      if (int.TryParse(option, out optionIndex) && optionIndex >= 1 && optionIndex <= departments.Length)
+                      {    
+                         return departments[optionIndex - 1];
+                      }
+                 }
+             }
             public string GetProject()
             {
                 string[] projects = { "Project 1", "Project 2", "Project 3" };
                 return ChooseOption("Choose Project", projects);
             }
-
             public string GetManager()
             {
                 string[] managers = { "Manager 1", "Manager 2", "Manager 3" };
@@ -122,7 +117,7 @@ namespace EmployeeDirectory.Presentation
                 if (type == "Desciption" && input == "") break;
                     if(input=="")Console.WriteLine(type+" cannot be empty");
                     else
-                    Console.WriteLine("Please enter a valid name:");
+                    Console.WriteLine($"Please enter a valid {type}:");
                     input = Console.ReadLine()!;
                 }
                 return input;
@@ -137,12 +132,12 @@ namespace EmployeeDirectory.Presentation
                 if (email == "0") return "exit";
                 if (email == "") Console.WriteLine("Email cannot be empty");
                 else
-                    Console.WriteLine("Invalid email format. Please enter a valid email(name@Tezo.com):");
+                    Console.WriteLine("Invalid email format. Please enter a valid email(name@tezo.com):");
                     email = Console.ReadLine()!;
                 }
                 return email;
             }
-           public int GetAllLocation()
+            public int GetAllLocation()
            {
              var locations=_locationBL.GetAllLocation();
             Console.WriteLine("Choose Location");
@@ -161,7 +156,7 @@ namespace EmployeeDirectory.Presentation
                 }
             }
         }
-        public int GetAllDepartment()
+            public int GetAllDepartment()
         {
             var departments=_departmentBL.GetAllDepartment();
             Console.WriteLine("Choose Location");
@@ -180,7 +175,7 @@ namespace EmployeeDirectory.Presentation
                 }
             }
         }
-        public string GetPhone()
+            public string GetPhone()
             {
                 Console.WriteLine("Enter phone number:");
                 string phoneNumber = Console.ReadLine()!;
@@ -199,7 +194,7 @@ namespace EmployeeDirectory.Presentation
                 Console.WriteLine($"Enter {type} (dd/MM/yyyy):");
                 string dateStr = Console.ReadLine()!;
                 if (dateStr == "0") return "exit";
-            DateTime date;
+                DateTime date;
                 while (!DateTime.TryParseExact(dateStr, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out date)||dateStr=="")
                 {
                 if (dateStr == "0") return "exit";

@@ -20,6 +20,7 @@ namespace EmployeeDirectory.Start
 {
     internal class Program
     {
+        
         static void Main(string[] args)
         {
             ServiceCollection services = new();
@@ -32,8 +33,9 @@ namespace EmployeeDirectory.Start
             services.AddTransient<ILocationBL,LocationBL>();
             services.AddTransient<IDepartmentDAL,DepartmentDAL>();
             services.AddTransient<IDepartmentBL,DepartmentBL>();
+            services.AddSingleton<PresentationLayer>();
             var provider= services.BuildServiceProvider();
-            PresentationLayer layer = new PresentationLayer(provider.GetService<IEmployeeBL>()!,provider.GetService<Iinput>()!,provider.GetService<IRoleBL>()!, provider.GetService<ILocationBL>()!, provider.GetService<IDepartmentBL>()!);
+            var layer=provider.GetService<PresentationLayer>();
             layer.Run();
         }
     }

@@ -1,5 +1,4 @@
-﻿using ConsoleTables;
-using EmployeeDirectory.Bll.Interface.roleBL;
+﻿using EmployeeDirectory.Bll.Interface.roleBL;
 using EmployeeDirectory.Models;
 using EmployeeDirectory.Presentation.Interface;
 using EmployeeDirectory.BLL.Interface.employeeBL;
@@ -9,22 +8,13 @@ using EmployeeDirectory.BLL.Interface.departmentBL;
 using EmployeeDirectory.Models.department;
 namespace EmployeeDirectory.Presentation
 {
-    public class PresentationLayer
+    public partial class PresentationLayer
     {
         private IDepartmentBL _departmentBL;
         private IEmployeeBL _employeeBL;
         private Iinput _input;
         private IRoleBL _roleBL;
         private ILocationBL _locationBL;
-        static List<string> employeeManagmentOption=new List<string>() {"Go Back", "Add Employee", "Display all", "Display one", "Edit Employee", "Delete Employee"};
-        static List<string> mainMenueOption = new List<string>() { "Exit", "Employee Management", "Role Management","Location Managment", "DepartmentManagment"};
-        static List<string> roleManagmentOption = new List<string> { "Go Back", "Add Role", "Display All" };
-        static List<string> locationManagmentOption = new List<string> { "Go Back", "Add Location", "View All Location" };
-        static List<string> departmentManagmentOption = new List<string>
-        {
-            "Go Back", "Add Department", "View All Department"
-        };
-        static List<string> editEmpOptions = new List<string>() {"Go Back", "Save", "First Name", "Last Name", "Date Of Birth", "Email", "Phone Number", "Joining Dat", "Location", "Role", "Department", "Manager", "Project" };
         public PresentationLayer(IEmployeeBL _employeeBL,Iinput _input,IRoleBL _roleBL,ILocationBL _locationBL,IDepartmentBL _departmentBL) {
             this._departmentBL = _departmentBL;
             this._roleBL = _roleBL;
@@ -92,33 +82,7 @@ namespace EmployeeDirectory.Presentation
                     case "0":
                         return;
                     case "1":
-                        Console.WriteLine("To exit the option between selection press '0'");
-                        Console.WriteLine("Enter Employee Details");
-                        string id = IsAvailableId("add");
-                        if (id == "exit") break;
-                        string firstName = _input.GetAlpabetInput("First Name");
-                        if (firstName == "exit") break;
-                        string lastName = _input.GetAlpabetInput("Last Name");
-                        if (lastName == "exit") break;
-                        string dob = _input.GetDate("Date of birth");
-                        if (dob == "exit") break;
-                        string mail = _input.GetEmail();
-                        if (mail == "exit") break;
-                        string pNumber = _input.GetPhone();
-                        if (pNumber == "exit") break;
-                        string jDate = _input.GetDate("Joining date");
-                        if (jDate == "exit") break;
-                             string jTitle = _input.GetRole();
-                        if (jTitle == "exit") break;
-                        int location = _input.GetRoleSpecificLocation(jTitle);
-                        if (location == -1) break;
-                        int department = _input.GetRoleSpecificDepartment(jTitle);
-                        if (department == -1) break;
-                        string manager = _input.GetManager();
-                        if (manager == "exit") break;
-                        string project = _input.GetProject();
-                        if (project == "exit") break;
-                        _employeeBL.AddEmployee(new Employee { Id = id, City = location, Role = jTitle, JoiningDate = jDate, Department = department, FirstName = firstName, LastName = lastName, Dob = dob, Email = mail, Manager = manager, PhoneNumber = pNumber, Project = project });
+                        AddEmployee();
                         break;
                     case "2":
                         DisplayAllEmployees();
@@ -151,42 +115,6 @@ namespace EmployeeDirectory.Presentation
                 }
             }
         }
-        public  void DisplayAllEmployees()
-        {
-            List<Employee> employees = _employeeBL.GetAllEmployees();
-            if (employees == null || employees.Count == 0)
-            {
-                Console.WriteLine("There is no data available");
-                return;
-            }
-            var table = new ConsoleTable("ID", "Name", "Role", "Department", "Location", "Joining Date", "Manager", "Project");
-            foreach (Employee emp in employees)
-            {
-                table.AddRow(emp.Id, emp.FirstName + " " + emp.LastName, emp.Role, _departmentBL.GetDepartmentById(emp.Department), _locationBL.GetLocationById(emp.City), emp.JoiningDate, emp.Manager, emp.Project);
-            }
-            Console.WriteLine(table.ToString());
-        }
-        public void showAvailableId()
-        {
-            List<Employee> employees= _employeeBL.GetAllEmployees();
-            if(employees==null || employees.Count==0)
-            {
-                Console.WriteLine("No ids avilable");
-                return;
-            }
-            Console.WriteLine("\nThe avilable ids are:");
-            Console.Write("|");
-            foreach(Employee emp in employees)
-            {
-             Console.Write(" "+emp.Id+" "+"|");
-            }
-        }
-        public void displaySpecific(Employee emp)
-        {
-            var table = new ConsoleTable("Name","ID","Role","Department","Location","Joining Date","Manger","Date Of Birth","Phone Number","Project");
-            table.AddRow(emp.FirstName+" "+emp.LastName,emp.Id,emp.Role,_departmentBL.GetDepartmentById(emp.Department), _locationBL.GetLocationById(emp.City),emp.JoiningDate,emp.Manager,emp.Dob,emp.PhoneNumber,emp.Project);
-            Console.WriteLine(table.ToString());
-        }
         public void RoleManagment()
         {
             Console.WriteLine("\nRole Managment");
@@ -205,15 +133,7 @@ namespace EmployeeDirectory.Presentation
                     case "0":
                         return;
                     case "1":
-                        string roleName = _input.GetAlpabetInput("Role Name");
-                        if (roleName == "exit") break;
-                        string description = _input.GetAlpabetInput("Desciption");
-                        if (description == "exit") break;
-                        int location = _input.GetAllLocation();
-                        if (location == -1) break;
-                        int department = _input.GetAllDepartment();
-                        if (department == -1) break;
-                        _roleBL.AddRole(new Models.Roles.Role { Name=roleName,Department=department,Description=description,Location=location});
+                        AddRole();
                         break;
                         case "2":
                         DisplayAllRole();
@@ -224,21 +144,6 @@ namespace EmployeeDirectory.Presentation
                         
                 }
             }
-        }
-        public void DisplayAllRole()
-        {
-            List<Models.Roles.Role> roles = _roleBL.GetAllRoles();
-            if (roles == null || roles.Count == 0)
-            {
-                Console.WriteLine("There is no data available");
-                return;
-            }
-            var table = new ConsoleTable("Role", "Location", "Description", "Department");
-            foreach (Models.Roles.Role role in roles)
-            {
-                table.AddRow(role.Name,_locationBL.GetLocationById(role.Location), role.Description, _departmentBL.GetDepartmentById(role.Department));
-            }
-            Console.WriteLine(table.ToString());
         }
         public void editEmployee(Employee employee,string id)
         {
@@ -252,59 +157,10 @@ namespace EmployeeDirectory.Presentation
                     Console.WriteLine($"{i}.{editEmpOptions[i]}");
                 }
                 string choice=Console.ReadLine()!;
-                if (choice == "e") return;
-                switch(choice)
-                {
-                    case "0":  break;
-                    case "1":string firstName = _input.GetAlpabetInput("First Name");
-                        if (firstName == "exit") break;
-                        employee.FirstName = firstName;
-                        break;
-                    case "2":string lastName = _input.GetAlpabetInput("Last Name");
-                        if (lastName == "exit") break;
-                        employee.LastName= lastName;
-                        break;
-                    case "3":string dob = _input.GetDate("Date of birth");
-                        if (dob == "exit") break;
-                        employee.Dob = dob;
-                        break;
-                    case "4":string email = _input.GetEmail();
-                        if (email == "exit") break;
-                        employee.Email = email;
-                        break;
-                    case "5":string pNumber = _input.GetPhone();
-                        if (pNumber == "exit") break;
-                        employee.PhoneNumber = pNumber;
-                        break;
-                    case "6":string joiningDate = _input.GetDate("Joining date");
-                        if (joiningDate == "exit") break;
-                        employee.JoiningDate= joiningDate;
-                        break;
-                    case "8":
-                        string role = _input.GetRole();
-                        if (role == "exit") break;
-                        employee.Role = role;
-                        break;
-                    case "7": int city = _input.GetRoleSpecificLocation(employee.Role);
-                        if (city == -1) break;
-                        employee.City = city;
-                        break;
-                    case "9":int department = _input.GetRoleSpecificDepartment(employee.Role);
-                        if (department == 0) break;
-                        employee.Department = department;
-                        break;
-                    case "10":string manager = _input.GetManager();
-                        if (manager == "exit") break;
-                        employee.Manager = manager;
-                        break;
-                    case "11": string project = _input.GetProject();
-                        if (project == "exit") break;
-                        employee.Project = project;
-                        break;
-                     default: Console.WriteLine("Invalid _input"); break;
+                editEmployeeOptions(employee,choice);
+                if(choice == "0") { break;}
             }
-                if(choice == "0") { break; }
-            }
+            Console.WriteLine("Employee Edited Sucessfully");
             _employeeBL.EditEmployee(employee,id);
         }
         string IsAvailableId(string type)
@@ -349,7 +205,7 @@ namespace EmployeeDirectory.Presentation
                     case "0": return;
                     case "1":
                         string location = _input.GetAlpabetInput("location");
-                        int id = GetPreviousLocationId();
+                        int id = GetNextLocationId();
                       _locationBL.AddLocation(new Location{Id=id,Value=location});
                         break;
                     case "2":
@@ -361,15 +217,7 @@ namespace EmployeeDirectory.Presentation
                 }
           
         }
-        void DisplayAllLocation()
-        {
-           var locations= _locationBL.GetAllLocation();
-            foreach (var location in locations)
-            {
-                Console.WriteLine(location.Id +" "+location.Value);
-            }
-        }
-        int GetPreviousLocationId()
+        int GetNextLocationId()
         {
             var locations = _locationBL.GetAllLocation();
             if(locations==null) return 0;
@@ -393,7 +241,7 @@ namespace EmployeeDirectory.Presentation
                     case "0": return;
                     case "1":
                         string department = _input.GetAlpabetInput("department");
-                        int id = GetPreviousDepartmentId();
+                        int id = GetNextDepartmentId();
                         _departmentBL.AddDepartment(new Department { Id = id, Value = department });
                         break;
                     case "2":
@@ -406,21 +254,7 @@ namespace EmployeeDirectory.Presentation
             }
 
         }
-        void DisplayAllDepartments()
-        {
-            _input.GetAllLocation();
-            var departments = _departmentBL.GetAllDepartment();
-            if(departments==null)
-            {
-                Console.WriteLine("No departments available");
-                return;
-            }
-            foreach (var department in departments)
-            {
-                Console.WriteLine(department.Id + " " + department.Value);
-            }
-        }
-        int GetPreviousDepartmentId()
+        int GetNextDepartmentId()
         {
             var departments = _departmentBL.GetAllDepartment();
             if (departments == null) return 0;
