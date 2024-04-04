@@ -22,7 +22,6 @@ namespace EmployeeDirectory.Presentation
             this._input = _input;
             this._locationBL = _locationBL;
         }
-
         public void Run()
         {
 
@@ -91,14 +90,14 @@ namespace EmployeeDirectory.Presentation
                         Console.WriteLine("Display Specific \n----");
                         Console.Write("Enter the info of employee you want to view");
                         showAvailableId();
-                        string empId = IsAvailableId("view one");
+                        string empId = GetIdInput("view one");
                         displaySpecific(_employeeBL.GetEmployee(empId));
                         break;
                      case "4":
                         Console.WriteLine("Edit \n----");
                         Console.WriteLine("To exit the option between selection press 'e'");
                         showAvailableId();
-                        empId = IsAvailableId("edit");
+                        empId = GetIdInput("edit");
                         editEmployee(_employeeBL.GetEmployee(empId), empId);
                         break;
                     case "5":
@@ -163,7 +162,7 @@ namespace EmployeeDirectory.Presentation
             Console.WriteLine("Employee Edited Sucessfully");
             _employeeBL.EditEmployee(employee,id);
         }
-        string IsAvailableId(string type)
+        string GetIdInput(string type)
         {
             string id = _input.GetId();
             var employee = _employeeBL.GetEmployee(id);

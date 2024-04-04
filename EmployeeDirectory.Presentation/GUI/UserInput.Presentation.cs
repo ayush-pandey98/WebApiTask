@@ -1,45 +1,47 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EmployeeDirectory.Bll;
+﻿
+using System.Runtime.InteropServices;
 using EmployeeDirectory.Models;
-using EmployeeDirectory.Presentation.Interface;
+
 
 namespace EmployeeDirectory.Presentation
 {
     public partial class PresentationLayer
     {
-       void AddEmployee() {
+        Dictionary<string, Func<object>> GetEmployeeInputDetails()
+        {
+            Dictionary<string, Func<object>> EmployeeDetails = new Dictionary<string, Func<object>>
+        {
+            { "Id", () => GetIdInput("add") },
+            { "FirstName", () => _input.GetAlpabetInput("First Name") },
+            { "LastName", () => _input.GetAlpabetInput("Last Name") },
+            { "Dob", () => _input.GetDate("Date of birth") },
+            { "Email", () => _input.GetEmail() },
+            { "PhoneNumber", () => _input.GetPhone() },
+            { "JoiningDate", () => _input.GetDate("Joining date") },
+            { "Role", () => _input.GetRole() },
+            { "Manager", () => _input.GetManager() },
+            { "Project", () => _input.GetProject() }
+        };
+            return EmployeeDetails;
+        }
+        void AddEmployee() {
+            var EmployeeDetails = GetEmployeeInputDetails();
             Console.WriteLine("To exit the option between selection press '0'");
             Console.WriteLine("Enter Employee Details");
-            string id = IsAvailableId("add");
-            if (id == "exit") return;
-            string firstName = _input.GetAlpabetInput("First Name");
-            if (firstName == "exit") return;
-            string lastName = _input.GetAlpabetInput("Last Name");
-            if (lastName == "exit") return;
-            string dob = _input.GetDate("Date of birth");
-            if (dob == "exit") return;
-            string mail = _input.GetEmail();
-            if (mail == "exit") return;
-            string pNumber = _input.GetPhone();
-            if (pNumber == "exit") return;
-            string jDate = _input.GetDate("Joining date");
-            if (jDate == "exit") return;
-            string jTitle = _input.GetRole();
-            if (jTitle == "exit") return;
-            int location = _input.GetRoleSpecificLocation(jTitle);
-            if (location == -1) return;
-            int department = _input.GetRoleSpecificDepartment(jTitle);
-            if (department == -1) return;
-            string manager = _input.GetManager();
-            if (manager == "exit") return;
-            string project = _input.GetProject();
-            if (project == "exit") return;
-            _employeeBL.AddEmployee(new Employee { Id = id, City = location, Role = jTitle, JoiningDate = jDate, Department = department, FirstName = firstName, LastName = lastName, Dob = dob, Email = mail, Manager = manager, PhoneNumber = pNumber, Project = project });
-            return;
+            Employee emp=new Employee();
+            foreach (var propertyInfo in typeof(Employee).GetProperties())
+            {
+                var input = EmployeeDetails[propertyInfo.Name]();
+                if (input.Equals("exit")||input.Equals(-1)) return;
+                propertyInfo.SetValue(emp,input);
+                if (propertyInfo.Name.Equals("Role"))
+                {
+                    EmployeeDetails.Add("City", () => _input.GetRoleSpecificLocation(input.ToString()));
+                    EmployeeDetails.Add("Department", () => _input.GetRoleSpecificDepartment(input.ToString()));
+                }
+                
+            }
+            _employeeBL.AddEmployee(emp);
         }
         void editEmployeeOptions(Employee employee,string choice)
         {
