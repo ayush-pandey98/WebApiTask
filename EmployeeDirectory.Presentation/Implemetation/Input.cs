@@ -154,12 +154,14 @@ namespace EmployeeDirectory.Presentation
                 {
                     return locations[optionIndex - 1].Id;
                 }
+                if (optionIndex == 0) return -1;
+                Console.WriteLine("Invalid input");
             }
         }
             public int GetAllDepartment()
-        {
+           {
             var departments=_departmentBL.GetAllDepartment();
-            Console.WriteLine("Choose Location");
+            Console.WriteLine("Choose Department");
             for (int i = 0; i < departments.Count; i++)
             {
                 Console.WriteLine($"{i + 1}. {departments[i].Value}");
@@ -173,8 +175,9 @@ namespace EmployeeDirectory.Presentation
                 {
                     return departments[optionIndex - 1].Id;
                 }
-            }
-        }
+                Console.WriteLine("Invalid input");
+              }
+           }
             public string GetPhone()
             {
                 Console.WriteLine("Enter phone number:");

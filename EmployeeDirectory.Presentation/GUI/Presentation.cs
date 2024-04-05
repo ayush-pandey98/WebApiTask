@@ -150,14 +150,8 @@ namespace EmployeeDirectory.Presentation
             {
                 Console.Write("Choose the informations your want change :");
                 Console.WriteLine("\nTo exit the option between selection press '0'");
-                for(int i = 0;i<editEmpOptions.Count;i++)
-                {
-                    if (i == 0) { Console.WriteLine(); }
-                    Console.WriteLine($"{i}.{editEmpOptions[i]}");
-                }
-                string choice=Console.ReadLine()!;
-                editEmployeeOptions(employee,choice);
-                if(choice == "0") { break;}
+                EditEmployeeDetails(employee);
+                break;
             }
             Console.WriteLine("Employee Edited Sucessfully");
             _employeeBL.EditEmployee(employee,id);
