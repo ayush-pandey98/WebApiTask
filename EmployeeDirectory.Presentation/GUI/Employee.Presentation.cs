@@ -112,7 +112,7 @@ namespace EmployeeDirectory.Presentation
         public void showAvailableId()
         {
             List<Employee> employees = _employeeBL.GetAllEmployees();
-            if (employees == null || employees.Count == 0)
+            if (employees?.Count == 0)
             {
                 Console.WriteLine("No ids avilable");
                 return;
