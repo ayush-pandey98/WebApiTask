@@ -38,13 +38,13 @@ namespace EmployeeDirectory.Presentation
                    if(option== "0") return "exit";
             }
             }
-            public int GetRoleSpecificLocation(string roleName)
+            public string GetRoleSpecificLocation(string roleName)
                 {
-                    int[] locations = _roleBL.GetLocation(roleName).ToArray();
+                    string[] locations = _roleBL.GetLocation(roleName).ToArray();
                     Console.WriteLine("Choose Location");
                  for (int i = 0; i < locations.Length; i++)
                    {
-                     Console.WriteLine($"{i + 1}. {_locationBL.GetLocationById(locations[i])}");
+                     Console.WriteLine($"{i + 1}. {locations[i]}");
                    }
 
                  int optionIndex;
@@ -55,20 +55,21 @@ namespace EmployeeDirectory.Presentation
                      {
                         return locations[optionIndex - 1];
                      }
-                  }
+                    if (option == "0") return "exit";
+            }
                }
             public string GetRole()
             {
                 string[] roles = _roleBL.GetRoleName().ToArray();
                 return ChooseOption("Choose Role", roles);
             }
-            public int GetRoleSpecificDepartment(string roleName)
+            public string GetRoleSpecificDepartment(string roleName)
             {
                 Console.WriteLine("Choose Department");
-                int[] departments = _roleBL.GetDepartment(roleName).ToArray();
+                string[] departments = _roleBL.GetDepartment(roleName).ToArray();
                   for (int i = 0; i < departments.Length; i++)
                    {
-                    Console.WriteLine($"{i + 1}. {_departmentBL.GetDepartmentById(departments[i])}");
+                    Console.WriteLine($"{i + 1}. {departments[i]}");
                    }
 
                  int optionIndex;
@@ -79,7 +80,8 @@ namespace EmployeeDirectory.Presentation
                       {    
                          return departments[optionIndex - 1];
                       }
-                 }
+                if (option == "0") return "exit";
+            }
              }
             public string GetProject()
             {

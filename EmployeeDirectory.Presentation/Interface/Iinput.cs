@@ -3,9 +3,9 @@ namespace EmployeeDirectory.Presentation.Interface
 {
     public interface Iinput
     {
-        int GetRoleSpecificLocation(string roleName);
+        string GetRoleSpecificLocation(string roleName);
         string GetRole();
-        int GetRoleSpecificDepartment(string roleName);
+        string GetRoleSpecificDepartment(string roleName);
         string GetProject();
         string GetManager();
         public string GetId();
