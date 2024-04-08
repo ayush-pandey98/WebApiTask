@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 using EmployeeDirectory.BLL.Interface.employeeBL;
 using EmployeeDirectory.Models.Presentation.Employee;
+using EmployeeDirectory.Presentation.Constants;
 using EmployeeDirectory.Presentation.Interface;
 
 namespace EmployeeDirectory.Presentation.Presentation
@@ -12,16 +9,70 @@ namespace EmployeeDirectory.Presentation.Presentation
     public class EmployeeManagment
     {
         string role;
-        Iinput _input;
-        IEmployeeBL _employeeBL;
-        Helper _helper;
-        EmployeeManagment(Iinput _input,IEmployeeBL _employeeBL, Helper helper)
+        private Iinput _input;
+        private IEmployeeBL _employeeBL;
+        private Helper _helper;
+        private Constants.Constants _constants;
+        public EmployeeManagment(Iinput _input,IEmployeeBL _employeeBL, Helper helper,Constants.Constants _constants)
         {
             this._input = _input;
             this._employeeBL = _employeeBL;
             _helper = helper;
+            this._constants = _constants;
         }
-        Dictionary<string, Func<object>> GetEmployeeInputDetails()
+        public void Managment()
+        {
+            Console.WriteLine("\nEmployee Managment");
+            Console.WriteLine("------------------");
+
+            while (true)
+            {
+                for (int i = 0; i < _constants.employeeManagmentOption.Count; i++)
+                {
+                    if (i == 0) { Console.WriteLine(); }
+                    Console.WriteLine($"{i}.{_constants.employeeManagmentOption[i]}");
+                }
+                Console.Write("Enter your choice: ");
+                string choice = Console.ReadLine()!;
+                switch (choice)
+                {
+                    case "0":
+                        return;
+                    case "1":
+                        AddEmployee();
+                        break;
+                    case "2":
+                        DisplayAllEmployees(_employeeBL.GetAllEmployees());
+                        break;
+                    case "3":
+                        Console.WriteLine("Display Specific \n----");
+                        Console.Write("Enter the info of employee you want to view");
+                        showAvailableId();
+                        string empId = _helper.GetAvailableIdInput();
+                        displaySpecific(_employeeBL.GetEmployee(empId));
+                        break;
+                    case "4":
+                        Console.WriteLine("Edit \n----");
+                        Console.WriteLine("To exit the option between selection press 'e'");
+                        showAvailableId();
+                        empId = _helper.GetAvailableIdInput();
+                        EditEmployee(_employeeBL.GetEmployee(empId), empId);
+                        break;
+                    case "5":
+                        Console.WriteLine("Delete \n------");
+                        showAvailableId();
+                        string emp_id = _input.GetId();
+                        if (emp_id == "exit") break;
+                        _employeeBL.DeleteEmployee(emp_id);
+                        break;
+
+                    default:
+                        Console.WriteLine("Invalid choice. Please enter a valid option.");
+                        break;
+                }
+            }
+        }
+        private Dictionary<string, Func<object>> GetEmployeeInputDetails()
         {
             Dictionary<string, Func<object>> EmployeeDetails = new Dictionary<string, Func<object>>
             {
@@ -40,7 +91,7 @@ namespace EmployeeDirectory.Presentation.Presentation
         };
             return EmployeeDetails;
         }
-        void AddEmployee()
+        private void AddEmployee()
         {
             var EmployeeDetails = GetEmployeeInputDetails();
             Console.WriteLine("To exit the option between selection press '0'");
@@ -59,7 +110,19 @@ namespace EmployeeDirectory.Presentation.Presentation
             }
             _employeeBL.AddEmployee(emp);
         }
-        public void EditEmployeeDetails(EmployeeModelPresentation employee)
+        private void EditEmployee(EmployeeModelPresentation employee, string id)
+        {
+            while (true)
+            {
+                Console.Write("Choose the informations your want change :");
+                Console.WriteLine("\nTo exit the option between selection press '0'");
+                EditEmployeeDetails(employee);
+                break;
+            }
+            Console.WriteLine("Employee Edited Sucessfully");
+            _employeeBL.EditEmployee(employee, id);
+        }
+        private void EditEmployeeDetails(EmployeeModelPresentation employee)
         {
             role = employee.Role;
             Dictionary<string, Func<object>> employeeDetails = GetEmployeeInputDetails();
@@ -87,21 +150,16 @@ namespace EmployeeDirectory.Presentation.Presentation
                 }
             }
         }
-        int GetSelectedOptions(Dictionary<string, Func<object>> employeeDetails)
+        private int GetSelectedOptions(Dictionary<string, Func<object>> employeeDetails)
         {
             Console.WriteLine("Select the detail to edit:");
             int choice = 0;
             Console.WriteLine($"{choice}. Save");
-            for(int i = 1; i < employeeDetails.Count; i++)
-            {
-                string item = employeeDetails.ElementAt(i).Key;
-                Console.WriteLine($"{i}.{item}");
-            }
-           /* foreach (string detail in employeeDetails.Keys)
+            foreach (var detail in employeeDetails.Keys.Skip(1))
             {
                 choice++;
                 Console.WriteLine($"{choice}. {detail}");
-            }*/
+            }
             try
             {
                 choice = Convert.ToInt32(Console.ReadLine());
@@ -113,7 +171,7 @@ namespace EmployeeDirectory.Presentation.Presentation
             }
             return choice;
         }
-        public void DisplayAllEmployees(List<EmployeeModelPresentation> employees)
+        private void DisplayAllEmployees(List<EmployeeModelPresentation> employees)
         {
             if (employees == null || employees.Count == 0)
             {
@@ -123,7 +181,7 @@ namespace EmployeeDirectory.Presentation.Presentation
             var table = _helper.BuildAllEmployeeTable(employees);
             Console.WriteLine(table.ToString());
         }
-        public void showAvailableId()
+        private void showAvailableId()
         {
             List<EmployeeModelPresentation> employees = _employeeBL.GetAllEmployees();
             if (employees == null || employees.Count == 0)
@@ -138,7 +196,7 @@ namespace EmployeeDirectory.Presentation.Presentation
                 Console.Write(" " + emp.Id + " " + "|");
             }
         }
-        public void displaySpecific(EmployeeModelPresentation emp)
+        private void displaySpecific(EmployeeModelPresentation emp)
         {
             var table = _helper.BuildSpecificEmployeeTable(emp);
             Console.WriteLine(table);

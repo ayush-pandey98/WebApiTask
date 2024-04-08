@@ -1,6 +1,7 @@
 ﻿using ConsoleTables;
 using EmployeeDirectory.BLL.Interface.employeeBL;
 using EmployeeDirectory.Models.Presentation.Employee;
+using EmployeeDirectory.Models.Presentation.Role;
 using EmployeeDirectory.Presentation.Interface;
 
 namespace EmployeeDirectory.Presentation.Presentation
@@ -9,7 +10,7 @@ namespace EmployeeDirectory.Presentation.Presentation
     {
         private Iinput _input;
         private IEmployeeBL _employeeBL;
-        Helper(Iinput _input,IEmployeeBL _employeeBL) { 
+        public Helper(Iinput _input,IEmployeeBL _employeeBL) { 
             this._input = _input;
             this._employeeBL = _employeeBL;
         }
@@ -54,8 +55,15 @@ namespace EmployeeDirectory.Presentation.Presentation
             }
             return id;
         }
-
-
+        public string BuildRoleTable(List<RoleModelPresentation> roles)
+        {
+            var table = new ConsoleTable("Role", "Location", "Description", "Department");
+            foreach (RoleModelPresentation role in roles)
+            {
+                table.AddRow(role.Name, role.Location, role.Description, role.Department);
+            }
+            return table.ToString();
+        }
     }
 
 }

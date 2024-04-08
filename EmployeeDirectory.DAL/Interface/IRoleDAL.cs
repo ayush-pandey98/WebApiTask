@@ -5,8 +5,8 @@ namespace EmployeeDirectory.DAL.Interface.roleDAL
   
    public  interface IRoleDAL
     {
-        public List<Role> GetAll();
-        public void Add(Role employee);
-        public void Set(List<Role> roles);
+        public List<RoleModelDAL> GetAll();
+        public void Add(RoleModelDAL employee);
+        public void Set(List<RoleModelDAL> roles);
     }
 }

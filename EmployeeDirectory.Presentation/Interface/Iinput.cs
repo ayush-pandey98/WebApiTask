@@ -13,8 +13,8 @@ namespace EmployeeDirectory.Presentation.Interface
         public string GetEmail();
         public string GetPhone();
         public string GetDate(string type);
-        public int GetAllLocation();
-        public int GetAllDepartment();
+        public string GetAllLocation();
+        public string GetAllDepartment();
 
     }
 }

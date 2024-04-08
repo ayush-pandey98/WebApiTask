@@ -38,6 +38,10 @@ namespace EmployeeDirectory.Start
             services.AddSingleton<PresentationLayer>();
             services.AddSingleton<Constants>();
             services.AddSingleton<Helper>();
+            services.AddSingleton<EmployeeManagment>();
+            services.AddSingleton<RoleManagment>();
+            services.AddSingleton<LocationManagment>();
+            services.AddSingleton<DepartmentMangment>();
             var provider= services.BuildServiceProvider();
             var layer=provider.GetService<PresentationLayer>();
             layer.Run();

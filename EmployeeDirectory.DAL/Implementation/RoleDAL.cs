@@ -6,13 +6,13 @@ namespace EmployeeDirectory.DAL.Roles
 {
     public class RoleDAL:IRoleDAL
     {
-        public List<Role> GetAll()
+        public List<RoleModelDAL> GetAll()
         {
             string RoleData = File.ReadAllText(@"C:\Users\ayush.p\source\repos\EmployeeDirectory.Start\Role.json");
-            List<Role> roles = JsonConvert.DeserializeObject<List<Role>>(RoleData)!;
+            List<RoleModelDAL> roles = JsonConvert.DeserializeObject<List<RoleModelDAL>>(RoleData)!;
             return roles;
         }
-        public void Add(Role role)
+        public void Add(RoleModelDAL role)
         {
             var roles = GetAll();
             if (roles != null) { 
@@ -20,11 +20,11 @@ namespace EmployeeDirectory.DAL.Roles
             }
             else
             {
-             roles = new List<Role> { role };
+             roles = new List<RoleModelDAL> { role };
             }   
             Set(roles);
         }
-        public void Set(List<Role> roles)
+        public void Set(List<RoleModelDAL> roles)
         {
             string json = JsonConvert.SerializeObject(roles);
             File.WriteAllText(@"C:\Users\ayush.p\source\repos\EmployeeDirectory.Start\Role.json", json);

@@ -137,7 +137,7 @@ namespace EmployeeDirectory.Presentation
                 }
                 return email;
             }
-            public int GetAllLocation()
+            public string GetAllLocation()
            {
              var locations=_locationBL.GetAllLocation();
             Console.WriteLine("Choose Location");
@@ -152,13 +152,13 @@ namespace EmployeeDirectory.Presentation
 
                 if (int.TryParse(option, out optionIndex) && optionIndex >= 1 && optionIndex <= locations.Count)
                 {
-                    return locations[optionIndex - 1].Id;
+                    return locations[optionIndex - 1].Value;
                 }
-                if (optionIndex == 0) return -1;
+                if (optionIndex == 0) return "exit";
                 Console.WriteLine("Invalid input");
             }
              }
-            public int GetAllDepartment()
+            public string GetAllDepartment()
            {
             var departments=_departmentBL.GetAllDepartment();
             Console.WriteLine("Choose Department");
@@ -173,9 +173,9 @@ namespace EmployeeDirectory.Presentation
 
                 if (int.TryParse(option, out optionIndex) && optionIndex >= 1 && optionIndex <= departments.Count)
                 {
-                    return departments[optionIndex - 1].Id;
+                    return departments[optionIndex - 1].Value;
                 }
-                if (optionIndex == 0) return -1;
+                if (optionIndex == 0) return "exit";
                 Console.WriteLine("Invalid input");
               }
            }
