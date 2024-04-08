@@ -7,5 +7,6 @@ namespace EmployeeDirectory.BLL.Interface.location
         public void AddLocation(Location location);
         public List<Location> GetAllLocation();
         string GetLocationById(int id);
+        public int GetLocationId(string location);
     }
 }

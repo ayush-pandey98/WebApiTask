@@ -5,20 +5,20 @@ namespace EmployeeDirectory.DAL
 {
     public class EmployeeDAL:IEmployeeDAL
     {
-        public List<Employee> GetAll()
+        public List<EmployeeModelDAL> GetAll()
         {
             string employeeData = File.ReadAllText(@"C:\Users\ayush.p\source\repos\EmployeeDirectory.Start\Employee.json");
-            List<Employee> employees = JsonConvert.DeserializeObject<List<Employee>>(employeeData)!;
+            List<EmployeeModelDAL> employees = JsonConvert.DeserializeObject<List<EmployeeModelDAL>>(employeeData)!;
             return employees;
         }
-        public void Add(Employee employee)
+        public void Add(EmployeeModelDAL employee)
         {
             var employees = GetAll();
-            if(employees == null) { employees = new List<Employee>(); }
+            if(employees == null) { employees = new List<EmployeeModelDAL>(); }
             employees.Add(employee);
             Set(employees);
         }
-        public Employee GetById(string id)
+        public EmployeeModelDAL GetById(string id)
         {
             var employees = GetAll();
             if (employees == null) return null;
@@ -36,7 +36,7 @@ namespace EmployeeDirectory.DAL
             }
             return false;
         }
-        public void Set(List<Employee> employees)
+        public void Set(List<EmployeeModelDAL> employees)
         {
             string json = JsonConvert.SerializeObject(employees);
             File.WriteAllText(@"C:\Users\ayush.p\source\repos\EmployeeDirectory.Start\Employee.json", json);

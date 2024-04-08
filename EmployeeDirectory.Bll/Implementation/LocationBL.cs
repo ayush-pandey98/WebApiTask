@@ -24,5 +24,10 @@ namespace EmployeeDirectory.BLL.Implementation.Location
             var locations = _locationDAL.GetAll();
             return locations.Find(loc => loc.Id == id).Value;
         }
+        public int GetLocationId(string location)
+        {
+            var locations = _locationDAL.GetAll();
+            return locations.Find(loc => loc.Value == location).Id;
+        }
     }
 }

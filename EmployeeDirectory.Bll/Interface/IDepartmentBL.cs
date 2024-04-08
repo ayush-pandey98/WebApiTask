@@ -7,5 +7,6 @@ namespace EmployeeDirectory.BLL.Interface.departmentBL
         public void AddDepartment(Department department);
         public List<Department> GetAllDepartment();
         public string GetDepartmentById(int id);
+        public int GetDepartmentId(string department);
     }
 }

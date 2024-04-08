@@ -40,22 +40,22 @@ namespace EmployeeDirectory.Presentation
             }
             public int GetRoleSpecificLocation(string roleName)
                 {
-                  int[] locations = _roleBL.GetLocation(roleName).ToArray();
-                  Console.WriteLine("Choose Location");
+                    int[] locations = _roleBL.GetLocation(roleName).ToArray();
+                    Console.WriteLine("Choose Location");
                  for (int i = 0; i < locations.Length; i++)
-                {
-                Console.WriteLine($"{i + 1}. {_locationBL.GetLocationById(locations[i])}");
-                }
+                   {
+                     Console.WriteLine($"{i + 1}. {_locationBL.GetLocationById(locations[i])}");
+                   }
 
-               int optionIndex;
-               while (true)
-                {
-                string option = Console.ReadLine()!;
-                if (int.TryParse(option, out optionIndex) && optionIndex >= 1 && optionIndex <= locations.Length)
-                {
-                    return locations[optionIndex - 1];
-                }
-                }
+                 int optionIndex;
+                 while (true)
+                 {
+                    string option = Console.ReadLine()!;
+                    if (int.TryParse(option, out optionIndex) && optionIndex >= 1 && optionIndex <= locations.Length)
+                     {
+                        return locations[optionIndex - 1];
+                     }
+                  }
                }
             public string GetRole()
             {
@@ -157,7 +157,7 @@ namespace EmployeeDirectory.Presentation
                 if (optionIndex == 0) return -1;
                 Console.WriteLine("Invalid input");
             }
-        }
+             }
             public int GetAllDepartment()
            {
             var departments=_departmentBL.GetAllDepartment();
@@ -175,6 +175,7 @@ namespace EmployeeDirectory.Presentation
                 {
                     return departments[optionIndex - 1].Id;
                 }
+                if (optionIndex == 0) return -1;
                 Console.WriteLine("Invalid input");
               }
            }

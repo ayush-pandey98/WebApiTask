@@ -25,7 +25,12 @@ namespace EmployeeDirectory.BLL.Implementation.departmentBL
         public string GetDepartmentById(int id)
         {
             var departments = _departmentDAL.GetAll();
-            return departments.Find(loc => loc.Id == id).Value;
+            return departments.Find(dep => dep.Id == id).Value;
+        }
+        public int GetDepartmentId(string department)
+        {
+            var departments = _departmentDAL.GetAll();
+            return departments.Find(dep=> dep.Value == department).Id;
         }
     }
 }

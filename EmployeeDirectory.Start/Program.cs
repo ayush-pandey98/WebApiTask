@@ -16,6 +16,8 @@ using EmployeeDirectory.DAL.Interface.departmentDAL;
 using EmployeeDirectory.DAL.Implementation.departmentDAL;
 using EmployeeDirectory.BLL.Interface.departmentBL;
 using EmployeeDirectory.BLL.Implementation.departmentBL;
+using EmployeeDirectory.Presentation.Constants;
+using EmployeeDirectory.Presentation.Presentation;
 namespace EmployeeDirectory.Start
 {
     internal class Program
@@ -34,6 +36,8 @@ namespace EmployeeDirectory.Start
             services.AddTransient<IDepartmentDAL,DepartmentDAL>();
             services.AddTransient<IDepartmentBL,DepartmentBL>();
             services.AddSingleton<PresentationLayer>();
+            services.AddSingleton<Constants>();
+            services.AddSingleton<Helper>();
             var provider= services.BuildServiceProvider();
             var layer=provider.GetService<PresentationLayer>();
             layer.Run();

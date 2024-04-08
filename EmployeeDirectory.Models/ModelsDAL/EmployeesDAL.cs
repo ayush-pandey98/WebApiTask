@@ -1,6 +1,6 @@
 ﻿namespace EmployeeDirectory.Models
 {
-        public class Employee
+        public class EmployeeModelDAL
         {
             public  string Id { get; set; }
             public  string FirstName { get; set; }

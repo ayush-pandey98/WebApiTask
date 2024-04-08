@@ -1,13 +1,14 @@
 ﻿using EmployeeDirectory.Models;
+using EmployeeDirectory.Models.Presentation.Employee;
 
 namespace EmployeeDirectory.BLL.Interface.employeeBL
 {
     public interface IEmployeeBL
     {
-        List<Employee> GetAllEmployees();
-        void AddEmployee(Employee employee);
-        Employee GetEmployee(string id);
+        List<EmployeeModelPresentation> GetAllEmployees();
+        void AddEmployee(EmployeeModelPresentation employee);
+        EmployeeModelPresentation GetEmployee(string id);
         void DeleteEmployee(string id);
-        void EditEmployee(Employee employee, string id);
+        void EditEmployee(EmployeeModelPresentation employee, string id);
     }
 }

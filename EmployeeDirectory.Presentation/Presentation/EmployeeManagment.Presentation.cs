@@ -1,18 +1,31 @@
-﻿using ConsoleTables;
-using EmployeeDirectory.Models;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using EmployeeDirectory.BLL.Interface.employeeBL;
+using EmployeeDirectory.Models.Presentation.Employee;
+using EmployeeDirectory.Presentation.Interface;
 
-
-namespace EmployeeDirectory.Presentation
+namespace EmployeeDirectory.Presentation.Presentation
 {
-    public partial class PresentationLayer
+    public class EmployeeManagment
     {
         string role;
-
+        Iinput _input;
+        IEmployeeBL _employeeBL;
+        Helper _helper;
+        EmployeeManagment(Iinput _input,IEmployeeBL _employeeBL, Helper helper)
+        {
+            this._input = _input;
+            this._employeeBL = _employeeBL;
+            _helper = helper;
+        }
         Dictionary<string, Func<object>> GetEmployeeInputDetails()
         {
             Dictionary<string, Func<object>> EmployeeDetails = new Dictionary<string, Func<object>>
-        {  
-            { "Id", () => GetIdInput("add") },
+            {
+            { "Id", () => _helper.GetNewIdInput() },
             { "FirstName", () => _input.GetAlpabetInput("First Name") },
             { "LastName", () => _input.GetAlpabetInput("Last Name") },
             { "Dob", () => _input.GetDate("Date of birth") },
@@ -27,32 +40,33 @@ namespace EmployeeDirectory.Presentation
         };
             return EmployeeDetails;
         }
-        void AddEmployee() {
+        void AddEmployee()
+        {
             var EmployeeDetails = GetEmployeeInputDetails();
             Console.WriteLine("To exit the option between selection press '0'");
             Console.WriteLine("Enter Employee Details");
-            Employee emp=new Employee();
-            foreach (var propertyInfo in typeof(Employee).GetProperties())
+            EmployeeModelPresentation emp = new EmployeeModelPresentation();
+            foreach (var propertyInfo in typeof(EmployeeModelPresentation).GetProperties())
             {
                 var input = EmployeeDetails[propertyInfo.Name]();
-                if (input.Equals("exit")||input.Equals(-1)) return;
-                propertyInfo.SetValue(emp,input);
+                if (input.Equals("exit") || input.Equals(-1)) return;
+                propertyInfo.SetValue(emp, input);
                 if (propertyInfo.Name.Equals("Role"))
                 {
                     role = input.ToString();
                 }
-                
+
             }
             _employeeBL.AddEmployee(emp);
         }
-        public void EditEmployeeDetails(Employee employee)
+        public void EditEmployeeDetails(EmployeeModelPresentation employee)
         {
-            role=employee.Role;
+            role = employee.Role;
             Dictionary<string, Func<object>> employeeDetails = GetEmployeeInputDetails();
             while (true)
             {
-                
-               int choice= GetSelectedOptions(employeeDetails);
+
+                int choice = GetSelectedOptions(employeeDetails);
 
                 if (choice == 0)
                 {
@@ -78,57 +92,56 @@ namespace EmployeeDirectory.Presentation
             Console.WriteLine("Select the detail to edit:");
             int choice = 0;
             Console.WriteLine($"{choice}. Save");
-            foreach (var detail in employeeDetails.Keys)
+            for(int i = 1; i < employeeDetails.Count; i++)
+            {
+                string item = employeeDetails.ElementAt(i).Key;
+                Console.WriteLine($"{i}.{item}");
+            }
+           /* foreach (string detail in employeeDetails.Keys)
             {
                 choice++;
                 Console.WriteLine($"{choice}. {detail}");
-            }
+            }*/
             try
             {
                 choice = Convert.ToInt32(Console.ReadLine());
             }
             catch (FormatException)
             {
-               
-              choice = -1;
+
+                choice = -1;
             }
             return choice;
         }
-        public void DisplayAllEmployees()
+        public void DisplayAllEmployees(List<EmployeeModelPresentation> employees)
         {
-            List<Employee> employees = _employeeBL.GetAllEmployees();
             if (employees == null || employees.Count == 0)
             {
                 Console.WriteLine("There is no data available");
                 return;
             }
-            var table = new ConsoleTable("ID", "Name", "Role", "Department", "Location", "Joining Date", "Manager", "Project");
-            foreach (Employee emp in employees)
-            {
-                table.AddRow(emp.Id, emp.FirstName + " " + emp.LastName, emp.Role, _departmentBL.GetDepartmentById(emp.Department), _locationBL.GetLocationById(emp.City), emp.JoiningDate, emp.Manager, emp.Project);
-            }
+            var table = _helper.BuildAllEmployeeTable(employees);
             Console.WriteLine(table.ToString());
         }
         public void showAvailableId()
         {
-            List<Employee> employees = _employeeBL.GetAllEmployees();
-            if (employees?.Count == 0)
+            List<EmployeeModelPresentation> employees = _employeeBL.GetAllEmployees();
+            if (employees == null || employees.Count == 0)
             {
                 Console.WriteLine("No ids avilable");
                 return;
             }
             Console.WriteLine("\nThe avilable ids are:");
             Console.Write("|");
-            foreach (Employee emp in employees)
+            foreach (EmployeeModelPresentation emp in employees)
             {
                 Console.Write(" " + emp.Id + " " + "|");
             }
         }
-        public void displaySpecific(Employee emp)
+        public void displaySpecific(EmployeeModelPresentation emp)
         {
-            var table = new ConsoleTable("Name", "ID", "Role", "Department", "Location", "Joining Date", "Manger", "Date Of Birth", "Phone Number", "Project");
-            table.AddRow(emp.FirstName + " " + emp.LastName, emp.Id, emp.Role, _departmentBL.GetDepartmentById(emp.Department), _locationBL.GetLocationById(emp.City), emp.JoiningDate, emp.Manager, emp.Dob, emp.PhoneNumber, emp.Project);
-            Console.WriteLine(table.ToString());
+            var table = _helper.BuildSpecificEmployeeTable(emp);
+            Console.WriteLine(table);
         }
     }
 }
