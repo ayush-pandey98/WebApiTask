@@ -1,13 +1,13 @@
-﻿using EmployeeDirectory.Models;
+﻿using EmployeeDirectory.Models.ModelDAL;
 
 namespace EmployeeDirectory.DAL.Interface.employeeDAL
 {
     public interface IEmployeeDAL
     {
-        public List<EmployeeModelDAL> GetAll();
-        public void Add(EmployeeModelDAL employee);
-        public EmployeeModelDAL GetById(string id);
-        public bool Delete(string id);
-        public void Set(List<EmployeeModelDAL> employees);
+        public List<Employee> GetAll();
+        public bool Add(Employee employee);
+        public Employee GetById(string id);
+        public bool Delete(Employee employee);
+        public bool Update(Employee employee, string id);
     }
 }

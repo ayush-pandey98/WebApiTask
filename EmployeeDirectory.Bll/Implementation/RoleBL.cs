@@ -1,25 +1,26 @@
 ﻿using EmployeeDirectory.Bll.Interface.roleBL;
 using EmployeeDirectory.DAL.Interface.roleDAL;
 using EmployeeDirectory.Models.Presentation.Role;
-using EmployeeDirectory.Models.Roles;
 using EmployeeDirectory.BLL.Interface.location;
 using EmployeeDirectory.BLL.Interface.departmentBL;
+using EmployeeDirectory.Models.ModelDAL;
+
 namespace EmployeeDirectory.Bll
 {
     public class RoleBL: IRoleBL
     {
-       private IRoleDAL _roleDAL;
-       private ILocationBL _locationBL;
-        private IDepartmentBL _departmentBL;
-        public RoleBL(IRoleDAL _roleDAL,ILocationBL _locationBL,IDepartmentBL _departmentBL)
+       private readonly IRoleDAL _roleDAL;
+       private readonly ILocationBL _locationBL;
+        private readonly IDepartmentBL _departmentBL;
+        public RoleBL(IRoleDAL roleDAL,ILocationBL locationBL,IDepartmentBL departmentBL)
         {
-          this._roleDAL = _roleDAL;
-          this._locationBL = _locationBL;
-          this._departmentBL = _departmentBL;
+          _roleDAL = roleDAL;
+          this._locationBL = locationBL;
+          _departmentBL = departmentBL;
         } 
-        public void AddRole(RoleModelPresentation role)
+        public bool AddRole(RoleDto role)
         {
-            RoleModelDAL roleModelDAL = new RoleModelDAL
+            Role roleModelDAL = new Role
             {
                 Name = role.Name,
                 Department=_departmentBL.GetDepartmentId(role.Department),
@@ -27,28 +28,29 @@ namespace EmployeeDirectory.Bll
                 Description=role.Description
             };
 
-            _roleDAL.Add(roleModelDAL);
+            return _roleDAL.Add(roleModelDAL);
         }
-        public List<RoleModelPresentation> GetAllRoles()
+        public List<RoleDto> GetAllRoles()
         {
-            List<RoleModelDAL> roleDALList = _roleDAL.GetAll();
-            List<RoleModelPresentation> rolePresentationList = roleDALList.Select(roleDAL =>
-                new RoleModelPresentation
-                {
+            List<Role> roleDALList = _roleDAL.GetAll();
+            List<RoleDto> rolePresentationList = roleDALList.Select(roleDAL =>
+                new RoleDto
+                { 
                   Name=roleDAL.Name,
                   Location=_locationBL.GetLocationById(roleDAL.Location),
                   Department=_departmentBL.GetDepartmentById(roleDAL.Department),
-                  Description=roleDAL.Description
-                  
+                  Description=roleDAL.Description 
                 }).ToList();
             return rolePresentationList;
         }
        public List<string> GetLocation(string roleName)
         {
+
             List<string> locations = new List<string>();
             var allRoles = GetAllRoles();
-            foreach (RoleModelPresentation role in allRoles) {
-                if (!locations.Contains(role.Location)&& role.Name.Equals(roleName))
+            foreach (RoleDto role in allRoles)
+            {
+                if (!locations.Contains(role.Location) && role.Name.Equals(roleName))
                 {
                     locations.Add(role.Location);
                 }
@@ -59,7 +61,7 @@ namespace EmployeeDirectory.Bll
         {
             List<string> roleName = new List<string>();
             var allRoles = _roleDAL.GetAll();
-            foreach (RoleModelDAL role in allRoles)
+            foreach (Role role in allRoles)
             {
                 if (!roleName.Contains(role.Name))
                 {
@@ -72,7 +74,7 @@ namespace EmployeeDirectory.Bll
         {
             List<string> department = new List<string>();
             var allRoles = GetAllRoles();
-            foreach (RoleModelPresentation role in allRoles)
+            foreach (RoleDto role in allRoles)
             {
                 if (!department.Contains(role.Department)&&role.Name.Equals(roleName))
                 {
@@ -80,6 +82,14 @@ namespace EmployeeDirectory.Bll
                 }
             }
             return department;
+        }
+        public string GetRoleById(int roleId)
+        {
+            return _roleDAL.GetRoleName(roleId);
+        }
+        public int GetIdByRole(string roleName)
+        {
+            return _roleDAL.GetRoleId(roleName);
         }
     }
 }

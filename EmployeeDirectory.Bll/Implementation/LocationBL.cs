@@ -1,33 +1,36 @@
 ﻿using EmployeeDirectory.BLL.Interface.location;
 using EmployeeDirectory.DAL.Interface.location;
-using EmployeeDirectory.Models.location;
-namespace EmployeeDirectory.BLL.Implementation.Location
+using EmployeeDirectory.Models.ModelDAL;
+using EmployeeDirectory.Models.ModelPresentation;
+
+namespace EmployeeDirectory.BLL.Implementation.LocationBL
 {
     public class LocationBL:ILocationBL
     {
-        private IlocationDAL _locationDAL;
-        public LocationBL(IlocationDAL _locationDAL)
+        private readonly IlocationDAL _locationDAL;
+        public LocationBL(IlocationDAL locationDAL)
         {
-            this._locationDAL = _locationDAL;
+            _locationDAL = locationDAL;
         }
-        public void AddLocation(Models.location.Location location)
+        public bool AddLocation(LocationDto location)
         {
-
-            _locationDAL.Add(location);
+            Location locationDAL = new Location()
+            {
+                Value = location.Value,
+            };
+            return _locationDAL.Add(locationDAL);
         }
-        public List<Models.location.Location> GetAllLocation()
+        public List<Location> GetAllLocation()
         {
             return _locationDAL.GetAll();
         }
         public string GetLocationById(int id)
         {
-            var locations = _locationDAL.GetAll();
-            return locations.Find(loc => loc.Id == id).Value;
+            return _locationDAL.GetNameById(id);
         }
         public int GetLocationId(string location)
         {
-            var locations = _locationDAL.GetAll();
-            return locations.Find(loc => loc.Value == location).Id;
+           return _locationDAL.GetIdByName(location);
         }
     }
 }

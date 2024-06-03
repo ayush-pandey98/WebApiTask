@@ -1,12 +1,13 @@
-﻿
-using EmployeeDirectory.Models.Roles;
+﻿using EmployeeDirectory.Models.ModelDAL;
+
 namespace EmployeeDirectory.DAL.Interface.roleDAL
 {
   
    public  interface IRoleDAL
     {
-        public List<RoleModelDAL> GetAll();
-        public void Add(RoleModelDAL employee);
-        public void Set(List<RoleModelDAL> roles);
+        public List<Role> GetAll();
+        public bool Add(Role employee);
+        public string GetRoleName(int id);
+        public int GetRoleId(string roleName);
     }
 }

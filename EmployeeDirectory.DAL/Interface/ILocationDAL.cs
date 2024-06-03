@@ -1,12 +1,13 @@
-﻿
-using EmployeeDirectory.Models.location;
+﻿using EmployeeDirectory.Models.ModelDAL;
 
 namespace EmployeeDirectory.DAL.Interface.location
 {
     public interface IlocationDAL
     {
         public List<Location> GetAll();
-        public void Add(Location location);
-        public void Set(List<Location> locations);
+        public bool Add(Location location);
+        public int GetIdByName(string name);
+        public string GetNameById(int id);
+
     }
 }

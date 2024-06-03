@@ -1,35 +1,45 @@
 ﻿using EmployeeDirectory.DAL.Interface.roleDAL;
-using EmployeeDirectory.Models.Roles;
-using Newtonsoft.Json;
+using EmployeeDirectory.Models.ModelDAL;
 
 namespace EmployeeDirectory.DAL.Roles
 {
     public class RoleDAL:IRoleDAL
     {
-        public List<RoleModelDAL> GetAll()
+        private readonly EmployeeEfContext _context;
+        public RoleDAL(EmployeeEfContext context)
         {
-            string RoleData = File.ReadAllText(@"C:\Users\ayush.p\source\repos\EmployeeDirectory.Start\Role.json");
-            List<RoleModelDAL> roles = JsonConvert.DeserializeObject<List<RoleModelDAL>>(RoleData)!;
-            return roles;
+            _context = context; 
         }
-        public void Add(RoleModelDAL role)
+        public List<Role> GetAll()
         {
-            var roles = GetAll();
-            if (roles != null) { 
-                roles.Add(role);
-            }
-            else
+            return _context.Roles.ToList();
+        }
+        public bool Add(Role role)
+        {
+            _context.Roles.Add(role);
+            return Save();
+        }
+        public bool Save()
+        {
+            var saved = _context.SaveChanges();
+            return saved > 0 ? true : false;
+        }
+        public string GetRoleName(int id) {
+            var role = _context.Roles.Where(rol=>rol.Id == id).FirstOrDefault();
+            if(role== null)
             {
-             roles = new List<RoleModelDAL> { role };
-            }   
-            Set(roles);
+                return "";
+            }
+            return role.Name;
         }
-        public void Set(List<RoleModelDAL> roles)
+        public int GetRoleId(string roleName)
         {
-            string json = JsonConvert.SerializeObject(roles);
-            File.WriteAllText(@"C:\Users\ayush.p\source\repos\EmployeeDirectory.Start\Role.json", json);
+            var role = _context.Roles.Where(rol=>rol.Name == roleName).FirstOrDefault();
+            if(role == null)
+            {
+                return -1;
+            }
+            return role.Id;
         }
-
-
     }
 }

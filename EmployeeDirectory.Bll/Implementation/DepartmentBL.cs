@@ -1,22 +1,25 @@
-﻿
-using EmployeeDirectory.BLL.Interface.departmentBL;
+﻿using EmployeeDirectory.BLL.Interface.departmentBL;
 using EmployeeDirectory.DAL.Interface.departmentDAL;
-using EmployeeDirectory.Models.department;
+using EmployeeDirectory.Models.ModelDAL;
+using EmployeeDirectory.Models.ModelPresentation;
 
 
 namespace EmployeeDirectory.BLL.Implementation.departmentBL
 {
     public class DepartmentBL:IDepartmentBL
     {
-        private IDepartmentDAL _departmentDAL;
-        public DepartmentBL(IDepartmentDAL _departmentDAL)
+        private readonly IDepartmentDAL _departmentDAL;
+        public DepartmentBL(IDepartmentDAL departmentDAL)
         {
-            this._departmentDAL = _departmentDAL;
+            _departmentDAL = departmentDAL;
         }
-        public void AddDepartment(Department department)
+        public bool AddDepartment(DepartmentDto department)
         {
-
-            _departmentDAL.Add(department);
+            Department departmentDAL = new Department()
+            {
+                Value = department.Value
+            };
+            return _departmentDAL.Add(departmentDAL);
         }
         public List<Department> GetAllDepartment()
         {
@@ -24,13 +27,11 @@ namespace EmployeeDirectory.BLL.Implementation.departmentBL
         }
         public string GetDepartmentById(int id)
         {
-            var departments = _departmentDAL.GetAll();
-            return departments.Find(dep => dep.Id == id).Value;
+            return _departmentDAL.GetNameById(id);
         }
         public int GetDepartmentId(string department)
         {
-            var departments = _departmentDAL.GetAll();
-            return departments.Find(dep=> dep.Value == department).Id;
+            return _departmentDAL.GetIdByName(department);
         }
     }
 }

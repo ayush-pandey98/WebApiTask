@@ -1,29 +1,32 @@
-﻿using EmployeeDirectory.Models;
-using EmployeeDirectory.BLL.Interface.employeeBL;
+﻿using EmployeeDirectory.BLL.Interface.employeeBL;
 using EmployeeDirectory.DAL.Interface.employeeDAL;
-using EmployeeDirectory.Models.Presentation.Employee;
 using EmployeeDirectory.BLL.Interface.location;
 using EmployeeDirectory.BLL.Interface.departmentBL;
+using EmployeeDirectory.Bll.Interface.roleBL;
+using EmployeeDirectory.Models.ModelDAL;
+using EmployeeDirectory.Models.Presentation.Employee;
+
 namespace EmployeeDirectory.Bll
 {
     public class EmployeeBL:IEmployeeBL
     {
-        private IEmployeeDAL _employeeDAL;
-        private ILocationBL _locationBL;
-        private IDepartmentBL _departmentBL;
-        public EmployeeBL(IEmployeeDAL _employeeDAL,ILocationBL _locationBL,IDepartmentBL _departmentBL)
+        private readonly IEmployeeDAL _employeeDAL;
+        private readonly ILocationBL _locationBL;
+        private readonly IDepartmentBL _departmentBL;
+        private readonly IRoleBL _roleBL;
+        public EmployeeBL(IEmployeeDAL employeeDAL,ILocationBL locationBL,IDepartmentBL departmentBL,IRoleBL roleBL)
         {
-            this._employeeDAL=_employeeDAL;
-            this._locationBL=_locationBL;
-            this._departmentBL = _departmentBL;
-
+            _employeeDAL = employeeDAL;
+            _locationBL = locationBL;
+            _departmentBL = departmentBL;
+            _roleBL = roleBL;
         }
-        public List<EmployeeModelPresentation> GetAllEmployees()
+        public List<EmployeeDto> GetAllEmployees()
         {
 
-            List<EmployeeModelDAL> employeeDALList = _employeeDAL.GetAll();
-            List<EmployeeModelPresentation> employeePresentationList = employeeDALList.Select(employeeDAL =>
-                new EmployeeModelPresentation
+            List<Employee> employeeDALList = _employeeDAL.GetAll();
+            List<EmployeeDto> employeePresentationList = employeeDALList.Select(employeeDAL =>
+                new EmployeeDto
                 {
                     Id = employeeDAL.Id,
                     FirstName = employeeDAL.FirstName,
@@ -31,7 +34,7 @@ namespace EmployeeDirectory.Bll
                     Email = employeeDAL.Email,
                     Dob = employeeDAL.Dob,
                     PhoneNumber = employeeDAL.PhoneNumber,
-                    Role = employeeDAL.Role,
+                    Role = _roleBL.GetRoleById(employeeDAL.Role),
                     City = _locationBL.GetLocationById(employeeDAL.City), 
                     JoiningDate = employeeDAL.JoiningDate,
                     Department = _departmentBL.GetDepartmentById(employeeDAL.Department), 
@@ -41,60 +44,66 @@ namespace EmployeeDirectory.Bll
 
             return employeePresentationList;
         }
-        public void AddEmployee(EmployeeModelPresentation employee)
+        public bool AddEmployee(Employee employee)
         {
-            EmployeeModelDAL employeeDAL = new EmployeeModelDAL {
+            return _employeeDAL.Add(employee);
+        }
+        public EmployeeDto GetEmployee(string id)
+        {
+            Employee employee = _employeeDAL.GetById(id);
+            return new EmployeeDto
+            {
                 Id = employee.Id,
                 FirstName = employee.FirstName,
                 LastName = employee.LastName,
                 Email = employee.Email,
                 Dob = employee.Dob,
                 PhoneNumber = employee.PhoneNumber,
-                Role = employee.Role,
-                City = _locationBL.GetLocationId(employee.City),
+                Role = _roleBL.GetRoleById(employee.Role),
+                City = _locationBL.GetLocationById(employee.City),
                 JoiningDate = employee.JoiningDate,
-                Department = _departmentBL.GetDepartmentId(employee.Department),
+                Department = _departmentBL.GetDepartmentById(employee.Department),
                 Manager = employee.Manager,
                 Project = employee.Project
             };
-
-            _employeeDAL.Add(employeeDAL);
         }
-        public EmployeeModelPresentation GetEmployee(string id)
+        public bool DeleteEmployee(EmployeeDto employee)
         {
-            List<EmployeeModelPresentation> employees = GetAllEmployees();
-            return employees.Find(emp=>emp.Id==id);
+            Employee emp = new Employee()
+            {
+                Id= employee.Id,
+                FirstName = employee.FirstName,
+                LastName = employee.LastName,
+                PhoneNumber = employee.PhoneNumber,
+                Email = employee.Email,
+                City = _locationBL.GetLocationId(employee.City),
+                Role = _roleBL.GetIdByRole(employee.Role),
+                Department = _departmentBL.GetDepartmentId(employee.Department),
+                Dob = employee.Dob,
+                JoiningDate = employee.JoiningDate,
+                Manager = employee.Manager,
+                Project = employee.Project
+            };
+            return _employeeDAL.Delete(emp);
         }
-        public void DeleteEmployee(string id)
+        public bool EditEmployee(EmployeeDto employee,string id)
         {
-            if (_employeeDAL.Delete(id))
+            Employee emp = new Employee()
             {
-                Console.WriteLine("Employee deleted succesfully");
-            }
-            else
-            {
-                Console.WriteLine("Employee not found");
-            }
-        }
-        public void EditEmployee(EmployeeModelPresentation employee,string id)
-        {
-            var employees=_employeeDAL.GetAll();
-            foreach (var empp in employees.Where(emp=>emp.Id==id))
-            {
-                empp.FirstName = employee.FirstName;
-                empp.LastName = employee.LastName;
-                empp.PhoneNumber = employee.PhoneNumber;
-                empp.Email = employee.Email;
-                empp.City= _locationBL.GetLocationId(employee.City);
-                empp.Role= employee.Role;
-                empp.JoiningDate = employee.JoiningDate;
-                empp.Department = _departmentBL.GetDepartmentId(employee.Department);
-                empp.Dob= employee.Dob;
-                empp.JoiningDate= employee.JoiningDate;
-                empp.Manager= employee.Manager;
-                empp.Project= employee.Project;
-            }
-            _employeeDAL.Set(employees);
+                Id = id,
+                FirstName = employee.FirstName,
+                LastName = employee.LastName,
+                PhoneNumber = employee.PhoneNumber,
+                Email = employee.Email,
+                City = _locationBL.GetLocationId(employee.City),
+                Role = _roleBL.GetIdByRole(employee.Role),
+                Department = _departmentBL.GetDepartmentId(employee.Department),
+                Dob = employee.Dob,
+                JoiningDate = employee.JoiningDate,
+                Manager = employee.Manager,
+                Project = employee.Project
+            };
+            return _employeeDAL.Update(emp, id);
         }
 
     }

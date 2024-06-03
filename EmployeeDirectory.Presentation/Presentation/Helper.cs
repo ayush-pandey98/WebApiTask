@@ -57,10 +57,10 @@ namespace EmployeeDirectory.Presentation.Presentation
         }
         public string BuildRoleTable(List<RoleModelPresentation> roles)
         {
-            var table = new ConsoleTable("Role", "Location", "Description", "Department");
+            var table = new ConsoleTable("ID","Role", "Location", "Description", "Department");
             foreach (RoleModelPresentation role in roles)
             {
-                table.AddRow(role.Name, role.Location, role.Description, role.Department);
+                table.AddRow(role.Id,role.Name, role.Location, role.Description, role.Department);
             }
             return table.ToString();
         }

@@ -1,7 +1,6 @@
 ﻿
 using EmployeeDirectory.BLL.Interface.employeeBL;
 using EmployeeDirectory.Models.Presentation.Employee;
-using EmployeeDirectory.Presentation.Constants;
 using EmployeeDirectory.Presentation.Interface;
 
 namespace EmployeeDirectory.Presentation.Presentation
@@ -27,9 +26,9 @@ namespace EmployeeDirectory.Presentation.Presentation
 
             while (true)
             {
+                Console.WriteLine();
                 for (int i = 0; i < _constants.employeeManagmentOption.Count; i++)
                 {
-                    if (i == 0) { Console.WriteLine(); }
                     Console.WriteLine($"{i}.{_constants.employeeManagmentOption[i]}");
                 }
                 Console.Write("Enter your choice: ");
@@ -72,19 +71,19 @@ namespace EmployeeDirectory.Presentation.Presentation
                 }
             }
         }
-        private Dictionary<string, Func<object>> GetEmployeeInputDetails()
+        private Dictionary<string, Func<string>> GetEmployeeInputDetails()
         {
-            Dictionary<string, Func<object>> EmployeeDetails = new Dictionary<string, Func<object>>
+            Dictionary<string, Func<string>> EmployeeDetails = new Dictionary<string, Func<string>>
             {
             { "Id", () => _helper.GetNewIdInput() },
-            { "FirstName", () => _input.GetAlpabetInput("First Name") },
-            { "LastName", () => _input.GetAlpabetInput("Last Name") },
-            { "Dob", () => _input.GetDate("Date of birth") },
+            { "FirstName", () => _input.GetName("First Name") },
+            { "LastName", () => _input.GetName("Last Name") },
+            { "Dob", () => _input.GetBirthDate() },
             { "Email", () =>_input.GetEmail() },
             { "PhoneNumber", _input.GetPhone },
             {"City",()=>_input.GetRoleSpecificLocation(role) },
             {"Department",()=>_input.GetRoleSpecificDepartment(role) },
-            { "JoiningDate", () => _input.GetDate("Joining date") },
+            { "JoiningDate", () => _input.GetJoiningDate() },
             { "Role", () => _input.GetRole() },
             { "Manager", () => _input.GetManager() },
             { "Project", () => _input.GetProject() }
@@ -125,7 +124,7 @@ namespace EmployeeDirectory.Presentation.Presentation
         private void EditEmployeeDetails(EmployeeModelPresentation employee)
         {
             role = employee.Role;
-            Dictionary<string, Func<object>> employeeDetails = GetEmployeeInputDetails();
+            Dictionary<string, Func<string>> employeeDetails = GetEmployeeInputDetails();
             while (true)
             {
 
@@ -138,8 +137,8 @@ namespace EmployeeDirectory.Presentation.Presentation
 
                 if (choice > 0 && choice <= employeeDetails.Count)
                 {
-                    string detailName = employeeDetails.ElementAt(choice - 1).Key;
-                    object newValue = employeeDetails[detailName]();
+                    string detailName = employeeDetails.ElementAt(choice).Key;
+                    string newValue = employeeDetails[detailName]();
                     if (newValue.Equals("exit") || newValue.Equals(-1)) return;
                     employee.GetType().GetProperty(detailName).SetValue(employee, newValue);
                     Console.WriteLine($"Employee {detailName} updated successfully!");
@@ -150,7 +149,7 @@ namespace EmployeeDirectory.Presentation.Presentation
                 }
             }
         }
-        private int GetSelectedOptions(Dictionary<string, Func<object>> employeeDetails)
+        private int GetSelectedOptions(Dictionary<string, Func<string>> employeeDetails)
         {
             Console.WriteLine("Select the detail to edit:");
             int choice = 0;

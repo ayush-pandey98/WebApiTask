@@ -1,45 +1,70 @@
-﻿using EmployeeDirectory.Models;
-using Newtonsoft.Json;
-using EmployeeDirectory.DAL.Interface.employeeDAL;
+﻿using EmployeeDirectory.DAL.Interface.employeeDAL;
+using EmployeeDirectory.Models.ModelDAL;
 namespace EmployeeDirectory.DAL
 {
     public class EmployeeDAL:IEmployeeDAL
     {
-        public List<EmployeeModelDAL> GetAll()
+        private readonly EmployeeEfContext _context;
+        public EmployeeDAL(EmployeeEfContext context)
         {
-            string employeeData = File.ReadAllText(@"C:\Users\ayush.p\source\repos\EmployeeDirectory.Start\Employee.json");
-            List<EmployeeModelDAL> employees = JsonConvert.DeserializeObject<List<EmployeeModelDAL>>(employeeData)!;
-            return employees;
+            _context = context;
         }
-        public void Add(EmployeeModelDAL employee)
+        public List<Employee> GetAll()
         {
-            var employees = GetAll();
-            if(employees == null) { employees = new List<EmployeeModelDAL>(); }
-            employees.Add(employee);
-            Set(employees);
+                return _context.Employees.ToList();   
         }
-        public EmployeeModelDAL GetById(string id)
+        public bool Add(Employee employee)
         {
-            var employees = GetAll();
-            if (employees == null) return null;
-            return employees.Find(emp => emp.Id == id)!;
+                _context.Employees.Add(employee);
+                return Save();
+            
         }
-        public bool Delete(string id)
+        public Employee GetById(string id)
         {
-            var employees = GetAll();
-            var employee = GetById(id);
-            if (employee != null)
+                var employee = _context.Employees.Find(id);
+                if (employee == null) return null;
+                return employee;
+            
+        }
+        public bool Delete(Employee employee)
+        {
+            var employeeToDelete = _context.Employees.Find(employee.Id);
+
+            if (employeeToDelete != null)
             {
-                employees.RemoveAll(emp => emp.Id == id);
-                Set(employees);
-                return true;
+                _context.Employees.Remove(employeeToDelete);
+                return Save();
             }
-            return false;
+            else
+            {
+                return false;
+            }
         }
-        public void Set(List<EmployeeModelDAL> employees)
+
+        public bool Update(Employee employee,string id)
         {
-            string json = JsonConvert.SerializeObject(employees);
-            File.WriteAllText(@"C:\Users\ayush.p\source\repos\EmployeeDirectory.Start\Employee.json", json);
+             var employeeToUpdate = _context.Employees.Find(id);
+            if (employeeToUpdate != null)
+            {
+                employeeToUpdate.Id = id;
+                employeeToUpdate.Email = employee.Email;
+                employeeToUpdate.City = employee.City;
+                employeeToUpdate.FirstName = employee.FirstName;
+                employeeToUpdate.LastName = employee.LastName;
+                employeeToUpdate.Role = employee.Role;
+                employeeToUpdate.Department = employee.Department;
+                employeeToUpdate.PhoneNumber = employee.PhoneNumber;
+                employeeToUpdate.Dob = employee.Dob;
+                employeeToUpdate.JoiningDate = employee.JoiningDate;
+                employeeToUpdate.Manager = employee.Manager;
+                employeeToUpdate.Project = employee.Project;
+                }
+                return Save();
+        }
+        public bool Save()
+        {
+            var saved = _context.SaveChanges(); ;
+            return saved > 0 ? true : false;
         }
     }
 }

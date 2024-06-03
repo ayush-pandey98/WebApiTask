@@ -3,18 +3,23 @@ namespace EmployeeDirectory.Presentation.Interface
 {
     public interface Iinput
     {
+        public string GetRoleName();
+        public string GetDescription();
+        string GetName(string type);
         string GetRoleSpecificLocation(string roleName);
         string GetRole();
         string GetRoleSpecificDepartment(string roleName);
         string GetProject();
         string GetManager();
-        public string GetId();
-        public string GetAlpabetInput(string input);
-        public string GetEmail();
+        string GetId();
+        string GetEmail();
+        public string GetLocation();
+        public string GetDepartment();
+        public string GetJoiningDate();
+        public string GetBirthDate();
         public string GetPhone();
-        public string GetDate(string type);
-        public string GetAllLocation();
-        public string GetAllDepartment();
+        string GetAllLocation();
+        string GetAllDepartment();
 
     }
 }

@@ -7,7 +7,7 @@ namespace EmployeeDirectory.Presentation.Presentation
     public class RoleManagment
     {
         private Iinput _input;
-        IRoleBL _roleBL;
+        private IRoleBL _roleBL;
         private Helper _helper;
         private Constants.Constants _constants;
         public RoleManagment(Iinput _input,IRoleBL _roleBL,Helper _helper, Constants.Constants _constants) { 
@@ -22,9 +22,9 @@ namespace EmployeeDirectory.Presentation.Presentation
             Console.WriteLine("------------------");
             while (true)
             {
+                Console.WriteLine();
                 for (int i = 0; i < _constants.roleManagmentOption.Count; i++)
                 {
-                    if (i == 0) { Console.WriteLine(); }
                     Console.WriteLine($"{i}.{_constants.roleManagmentOption[i]}");
                 }
                 Console.Write("Enter your choice : ");
@@ -46,13 +46,12 @@ namespace EmployeeDirectory.Presentation.Presentation
                 }
             }
         }
-
-        private Dictionary<string, Func<string>> GetRoleInputDetails()
+        private Dictionary<object, Func<object>> GetRoleInputDetails()
         {
-            Dictionary<string, Func<string>> roleDetails = new Dictionary<string, Func<string>>
+            Dictionary<object, Func<object>> roleDetails = new Dictionary<object, Func<object>>
         {
-                {"Name" ,()=>_input.GetAlpabetInput("Role Name") },
-                {"Description",()=>_input.GetAlpabetInput("Desciption") } ,
+                {"Name" ,()=>_input.GetRoleName() },
+                {"Description",()=>_input.GetDescription() } ,
                 {"Location" ,()=>_input.GetAllLocation() },
                 {"Department",()=> _input.GetAllDepartment()}
         };
@@ -77,6 +76,11 @@ namespace EmployeeDirectory.Presentation.Presentation
             RoleModelPresentation role = new RoleModelPresentation();
             foreach (var roleInfo in typeof(RoleModelPresentation).GetProperties())
             {
+                if (roleInfo.Name.Equals("Id", StringComparison.OrdinalIgnoreCase))
+                {
+                    continue; 
+                }
+
                 var input = roleDetails[roleInfo.Name]();
                 if (input.Equals("exit") || input.Equals(-1)) return;
                 roleInfo.SetValue(role, input);

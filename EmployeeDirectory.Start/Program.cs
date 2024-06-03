@@ -11,13 +11,14 @@ using EmployeeDirectory.BLL.Interface.employeeBL;
 using EmployeeDirectory.DAL.Interface.location;
 using EmployeeDirectory.DAL.Implementation.location;
 using EmployeeDirectory.BLL.Interface.location;
-using EmployeeDirectory.BLL.Implementation.Location;
 using EmployeeDirectory.DAL.Interface.departmentDAL;
 using EmployeeDirectory.DAL.Implementation.departmentDAL;
 using EmployeeDirectory.BLL.Interface.departmentBL;
 using EmployeeDirectory.BLL.Implementation.departmentBL;
 using EmployeeDirectory.Presentation.Constants;
 using EmployeeDirectory.Presentation.Presentation;
+using EmployeeDirectory.Models.ModelDAL;
+using EmployeeDirectory.BLL.Implementation.LocationBL;
 namespace EmployeeDirectory.Start
 {
     internal class Program
@@ -42,6 +43,7 @@ namespace EmployeeDirectory.Start
             services.AddSingleton<RoleManagment>();
             services.AddSingleton<LocationManagment>();
             services.AddSingleton<DepartmentMangment>();
+            services.AddSingleton<EmployeeEfContext>();
             var provider= services.BuildServiceProvider();
             var layer=provider.GetService<PresentationLayer>();
             layer.Run();

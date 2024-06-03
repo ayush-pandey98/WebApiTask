@@ -1,5 +1,5 @@
 ﻿using EmployeeDirectory.BLL.Interface.location;
-using EmployeeDirectory.Models.location;
+using EmployeeDirectory.Models.ModelDAL;
 using EmployeeDirectory.Presentation.Interface;
 
 namespace EmployeeDirectory.Presentation.Presentation
@@ -19,9 +19,9 @@ namespace EmployeeDirectory.Presentation.Presentation
         {
             while (true)
             {
+                Console.WriteLine();
                 for (int i = 0; i < _constants.locationManagmentOption.Count; i++)
-                {
-                    if (i == 0) { Console.WriteLine(); }
+                {   
                     Console.WriteLine($"{i}.{_constants.locationManagmentOption[i]}");
                 }
                 Console.WriteLine("\nTo exit the option between selection press '0'"); ;
@@ -32,9 +32,8 @@ namespace EmployeeDirectory.Presentation.Presentation
                 {
                     case "0": return;
                     case "1":
-                        string location = _input.GetAlpabetInput("location");
-                        int id = GetNextLocationId();
-                        _locationBL.AddLocation(new Location { Id = id, Value = location });
+                        string location = _input.GetLocation();
+                        _locationBL.AddLocation(new Location {Value = location });
                         break;
                     case "2":
                         DisplayAllLocation();
@@ -45,12 +44,6 @@ namespace EmployeeDirectory.Presentation.Presentation
                 }
             }
 
-        }
-        private int GetNextLocationId()
-        {
-            var locations = _locationBL.GetAllLocation();
-            if (locations == null) return 0;
-            return locations[locations.Count - 1].Id + 1;
         }
         private void DisplayAllLocation()
         {

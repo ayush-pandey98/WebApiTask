@@ -1,32 +1,39 @@
 ﻿using EmployeeDirectory.DAL.Interface.departmentDAL;
-using EmployeeDirectory.Models.department;
-using Newtonsoft.Json;
+using EmployeeDirectory.Models.ModelDAL;
 
 namespace EmployeeDirectory.DAL.Implementation.departmentDAL
 {
     public class DepartmentDAL:IDepartmentDAL
     {
+        private readonly EmployeeEfContext _context;
+        public DepartmentDAL(EmployeeEfContext context)
+        {
+            _context = context;
+        }
         public List<Department> GetAll()
         {
-            string locationData = File.ReadAllText(@"C:\Users\ayush.p\source\repos\EmployeeDirectory.Start\Department.json");
-            List<Department> departments = JsonConvert.DeserializeObject<List<Department>>(locationData)!;
-            return departments;
+            return _context.Departments.ToList(); 
         }
-        public void Add(Department location)
-        {
-            var departments = GetAll();
-            if (departments == null)
-            {
-                departments = new List<Department>();
-            }
-            departments.Add(location);
-            Set(departments);
-
+        public bool Add(Department department)
+        { 
+           _context.Departments.Add(department);
+            return Save();
         }
-        public void Set(List<Department> departments)
+        public string GetNameById(int id)
         {
-            string json = JsonConvert.SerializeObject(departments);
-            File.WriteAllText(@"C:\Users\ayush.p\source\repos\EmployeeDirectory.Start\Department.json", json);
+            var dept =  _context.Departments.Where(dep=>dep.Id==id).FirstOrDefault();
+            if (dept == null) return "";
+            return dept.Value;
+        }
+        public int GetIdByName(string name)
+        {
+            var dept = _context.Departments.FirstOrDefault(l => l.Value == name);
+            return dept != null ? dept.Id : -1;
+        }
+        public bool Save()
+        {
+            var saved  =  _context.SaveChanges();
+            return saved > 0 ? true : false;
         }
     }
 }

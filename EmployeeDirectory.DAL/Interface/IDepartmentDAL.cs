@@ -1,12 +1,12 @@
-﻿using EmployeeDirectory.Models.department;
+﻿using EmployeeDirectory.Models.ModelDAL;
 
 namespace EmployeeDirectory.DAL.Interface.departmentDAL
 {
     public interface IDepartmentDAL
     {
         public List<Department> GetAll();
-        public void Set(List<Department> departments);
-        public void Add(Department department);
-        
+        public bool Add(Department department);
+        public string GetNameById(int id);
+        public int GetIdByName(string name);
     }
 }

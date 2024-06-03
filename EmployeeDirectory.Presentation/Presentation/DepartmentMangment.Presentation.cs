@@ -1,5 +1,5 @@
 ﻿using EmployeeDirectory.BLL.Interface.departmentBL;
-using EmployeeDirectory.Models.department;
+using EmployeeDirectory.Models.ModelDAL;
 using EmployeeDirectory.Presentation.Interface;
 
 namespace EmployeeDirectory.Presentation.Presentation
@@ -19,9 +19,9 @@ namespace EmployeeDirectory.Presentation.Presentation
         {
             while (true)
             {
+                Console.WriteLine();
                 for (int i = 0; i < _constants.departmentManagmentOption.Count; i++)
                 {
-                    if (i == 0) { Console.WriteLine(); }
                     Console.WriteLine($"{i}.{_constants.departmentManagmentOption[i]}");
                 }
                 Console.WriteLine("\nTo exit the option between selection press '0'"); ;
@@ -32,9 +32,8 @@ namespace EmployeeDirectory.Presentation.Presentation
                 {
                     case "0": return;
                     case "1":
-                        string department = _input.GetAlpabetInput("department");
-                        int id = GetNextDepartmentId();
-                        _departmentBL.AddDepartment(new Department { Id = id, Value = department });
+                        string department = _input.GetDepartment();
+                        _departmentBL.AddDepartment(new Department { Value = department });
                         break;
                     case "2":
                         DisplayAllDepartments();
@@ -49,12 +48,11 @@ namespace EmployeeDirectory.Presentation.Presentation
        private int GetNextDepartmentId()
         {
             var departments = _departmentBL.GetAllDepartment();
-            if (departments == null) return 0;
+            if (departments == null|| departments.Count==0) return 0;
             return departments[departments.Count - 1].Id + 1;
         }
         private void DisplayAllDepartments()
         {
-            _input.GetAllLocation();
             var departments = _departmentBL.GetAllDepartment();
             if (departments == null)
             {

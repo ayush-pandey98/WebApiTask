@@ -1,10 +1,11 @@
-﻿using EmployeeDirectory.Models.department;
+﻿using EmployeeDirectory.Models.ModelDAL;
+using EmployeeDirectory.Models.ModelPresentation;
 
 namespace EmployeeDirectory.BLL.Interface.departmentBL
 {
     public interface IDepartmentBL
     {
-        public void AddDepartment(Department department);
+        public bool AddDepartment(DepartmentDto department);
         public List<Department> GetAllDepartment();
         public string GetDepartmentById(int id);
         public int GetDepartmentId(string department);
