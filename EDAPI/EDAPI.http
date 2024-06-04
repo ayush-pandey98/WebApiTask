@@ -1,6 +1,0 @@
-@EDAPI_HostAddress = http://localhost:5213
-
-GET {{EDAPI_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
