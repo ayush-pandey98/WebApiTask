@@ -1,6 +1,7 @@
 ﻿using EmployeeDirectory.BLL.Interface.employeeBL;
 using EmployeeDirectory.Models.ModelDAL;
 using EmployeeDirectory.Models.Presentation.Employee;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EmployeeDirectoryAPI.Controllers
@@ -14,6 +15,7 @@ namespace EmployeeDirectoryAPI.Controllers
         {
             _employeeBL = employeeBL;
         }
+        [Authorize]
         [HttpGet]
         public ActionResult GetAllEmployee() {
             var employees = _employeeBL.GetAllEmployees();

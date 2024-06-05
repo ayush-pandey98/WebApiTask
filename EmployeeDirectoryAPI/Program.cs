@@ -1,3 +1,4 @@
+using System.Text;
 using EmployeeDirectory.Bll;
 using EmployeeDirectory.Bll.Interface.roleBL;
 using EmployeeDirectory.BLL.Implementation.departmentBL;
@@ -14,6 +15,8 @@ using EmployeeDirectory.DAL.Interface.location;
 using EmployeeDirectory.DAL.Interface.roleDAL;
 using EmployeeDirectory.DAL.Roles;
 using EmployeeDirectory.Models.ModelDAL;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 namespace EmployeeDirectoryAPI
 {
@@ -22,20 +25,30 @@ namespace EmployeeDirectoryAPI
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
-            // Add services to the container.
-
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).
+                AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                        ValidAudience = builder.Configuration["Jwt:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+                    };
+                });
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            builder.Services.AddTransient<IEmployeeDAL, EmployeeDAL>();
-            builder.Services.AddTransient<IRoleDAL, RoleDAL>();
-            builder.Services.AddTransient<IEmployeeBL, EmployeeBL>();
-            builder.Services.AddTransient<IRoleBL, RoleBL>();
-            builder.Services.AddTransient<IlocationDAL, LocationDAL>();
-            builder.Services.AddTransient<ILocationBL, LocationBL>();
-            builder.Services.AddTransient<IDepartmentDAL, DepartmentDAL>();
-            builder.Services.AddTransient<IDepartmentBL, DepartmentBL>();
+            builder.Services.AddScoped<IEmployeeDAL, EmployeeDAL>();
+            builder.Services.AddScoped<IRoleDAL, RoleDAL>();
+            builder.Services.AddScoped<IEmployeeBL, EmployeeBL>();
+            builder.Services.AddScoped<IRoleBL, RoleBL>();
+            builder.Services.AddScoped<IlocationDAL, LocationDAL>();
+            builder.Services.AddScoped<ILocationBL, LocationBL>();
+            builder.Services.AddScoped<IDepartmentDAL, DepartmentDAL>();
+            builder.Services.AddScoped<IDepartmentBL, DepartmentBL>();
             builder.Services.AddScoped<EmployeeEfContext>();
             var app = builder.Build();
 
@@ -47,7 +60,7 @@ namespace EmployeeDirectoryAPI
             }
 
             app.UseHttpsRedirection();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
 
