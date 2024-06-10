@@ -1,36 +1,43 @@
 ﻿using EmployeeDirectory.DAL.Interface.departmentDAL;
-using EmployeeDirectory.Models.ModelDAL;
+using EmployeeDirectory.Model.ModelDAL;
 
 namespace EmployeeDirectory.DAL.Implementation.departmentDAL
 {
-    public class DepartmentDAL:IDepartmentDAL
+    public class DepartmentDAL : IDepartmentDAL
     {
-        private readonly EmployeeEfContext _context;
-        public DepartmentDAL(EmployeeEfContext context)
+        private readonly EmployeeDirectoryDbContext _context;
+        public DepartmentDAL()
+        {
+            
+        }
+        public DepartmentDAL(EmployeeDirectoryDbContext context)
         {
             _context = context;
         }
-        public List<Department> GetAll()
-        {
-            return _context.Departments.ToList(); 
-        }
+
         public bool Add(Department department)
-        { 
-           _context.Departments.Add(department);
+        {
+            _context.Add(department);
             return Save();
         }
-        public string GetNameById(int id)
+
+        public List<Department> GetAll()
         {
-            var dept =  _context.Departments.Where(dep=>dep.Id==id).FirstOrDefault();
-            if (dept == null) return "";
-            return dept.Value;
+            var departments = _context.Departments.ToList();
+            return departments;
         }
-        public int GetIdByName(string name)
+
+        public int GetDepartmentId(string departmentName)
         {
-            var dept = _context.Departments.FirstOrDefault(l => l.Value == name);
-            return dept != null ? dept.Id : -1;
+            int id = -1; 
+            var dept  = _context.Departments.Where(dep=>dep.DepartmentName == departmentName).FirstOrDefault();
+            if (dept != null)
+            {
+                id = dept.Id;
+            }
+            return id;
         }
-        public bool Save()
+        private bool Save()
         {
             var saved  =  _context.SaveChanges();
             return saved > 0 ? true : false;

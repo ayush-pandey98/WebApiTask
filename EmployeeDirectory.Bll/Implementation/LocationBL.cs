@@ -1,11 +1,11 @@
 ﻿using EmployeeDirectory.BLL.Interface.location;
 using EmployeeDirectory.DAL.Interface.location;
-using EmployeeDirectory.Models.ModelDAL;
+using EmployeeDirectory.Model.ModelDAL;
 using EmployeeDirectory.Models.ModelPresentation;
 
 namespace EmployeeDirectory.BLL.Implementation.LocationBL
 {
-    public class LocationBL:ILocationBL
+    public class LocationBL : ILocationBL
     {
         private readonly IlocationDAL _locationDAL;
         public LocationBL(IlocationDAL locationDAL)
@@ -16,21 +16,18 @@ namespace EmployeeDirectory.BLL.Implementation.LocationBL
         {
             Location locationDAL = new Location()
             {
-                Value = location.Value,
+                LocationName = location.Value,
             };
-            return _locationDAL.Add(locationDAL);
+            return _locationDAL.AddLocation(locationDAL);
         }
         public List<Location> GetAllLocation()
         {
             return _locationDAL.GetAll();
         }
+
         public string GetLocationById(int id)
         {
-            return _locationDAL.GetNameById(id);
-        }
-        public int GetLocationId(string location)
-        {
-           return _locationDAL.GetIdByName(location);
+            return _locationDAL.GetLocationById(id);
         }
     }
 }

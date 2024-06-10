@@ -1,20 +1,24 @@
 using System.Text;
 using EmployeeDirectory.Bll;
 using EmployeeDirectory.Bll.Interface.roleBL;
+using EmployeeDirectory.BLL.Implementation;
 using EmployeeDirectory.BLL.Implementation.departmentBL;
 using EmployeeDirectory.BLL.Implementation.LocationBL;
+using EmployeeDirectory.BLL.Interface;
 using EmployeeDirectory.BLL.Interface.departmentBL;
 using EmployeeDirectory.BLL.Interface.employeeBL;
 using EmployeeDirectory.BLL.Interface.location;
 using EmployeeDirectory.DAL;
+using EmployeeDirectory.DAL.Implementation;
 using EmployeeDirectory.DAL.Implementation.departmentDAL;
 using EmployeeDirectory.DAL.Implementation.location;
+using EmployeeDirectory.DAL.Interface;
 using EmployeeDirectory.DAL.Interface.departmentDAL;
 using EmployeeDirectory.DAL.Interface.employeeDAL;
 using EmployeeDirectory.DAL.Interface.location;
 using EmployeeDirectory.DAL.Interface.roleDAL;
 using EmployeeDirectory.DAL.Roles;
-using EmployeeDirectory.Models.ModelDAL;
+using EmployeeDirectory.Model.ModelDAL;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
@@ -49,10 +53,14 @@ namespace EmployeeDirectoryAPI
             builder.Services.AddScoped<ILocationBL, LocationBL>();
             builder.Services.AddScoped<IDepartmentDAL, DepartmentDAL>();
             builder.Services.AddScoped<IDepartmentBL, DepartmentBL>();
-            builder.Services.AddScoped<EmployeeEfContext>();
+            builder.Services.AddScoped<IRoleDetailBL,RoleDetailBL>();
+            builder.Services.AddScoped<IRoleDetailsDAL,RoleDetailDAL>();
+            builder.Services.AddScoped<EmployeeDirectoryDbContext>();
+            builder.Services.AddScoped<IStatusDAL,StatusDAL>();
+            builder.Services.AddScoped<IStatusBL,StatusBL>();
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
+
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();

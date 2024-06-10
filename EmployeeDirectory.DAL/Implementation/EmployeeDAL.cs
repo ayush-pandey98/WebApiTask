@@ -1,11 +1,11 @@
 ﻿using EmployeeDirectory.DAL.Interface.employeeDAL;
-using EmployeeDirectory.Models.ModelDAL;
+using EmployeeDirectory.Model.ModelDAL;
 namespace EmployeeDirectory.DAL
 {
     public class EmployeeDAL:IEmployeeDAL
     {
-        private readonly EmployeeEfContext _context;
-        public EmployeeDAL(EmployeeEfContext context)
+        private readonly EmployeeDirectoryDbContext _context;
+        public EmployeeDAL(EmployeeDirectoryDbContext context)
         {
             _context = context;
         }
@@ -28,38 +28,33 @@ namespace EmployeeDirectory.DAL
         }
         public bool Delete(Employee employee)
         {
-            var employeeToDelete = _context.Employees.Find(employee.Id);
-
-            if (employeeToDelete != null)
+            var emp = _context.Employees.SingleOrDefault(e => e.Id == employee.Id);
+            if (emp != null)
             {
-                _context.Employees.Remove(employeeToDelete);
+                emp.StatusId = employee.StatusId;
                 return Save();
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
         public bool Update(Employee employee,string id)
         {
-             var employeeToUpdate = _context.Employees.Find(id);
-            if (employeeToUpdate != null)
+            var emp = _context.Employees.SingleOrDefault(e => e.Id == employee.Id);
+            if (emp != null)
             {
-                employeeToUpdate.Id = id;
-                employeeToUpdate.Email = employee.Email;
-                employeeToUpdate.City = employee.City;
-                employeeToUpdate.FirstName = employee.FirstName;
-                employeeToUpdate.LastName = employee.LastName;
-                employeeToUpdate.Role = employee.Role;
-                employeeToUpdate.Department = employee.Department;
-                employeeToUpdate.PhoneNumber = employee.PhoneNumber;
-                employeeToUpdate.Dob = employee.Dob;
-                employeeToUpdate.JoiningDate = employee.JoiningDate;
-                employeeToUpdate.Manager = employee.Manager;
-                employeeToUpdate.Project = employee.Project;
-                }
+                emp.FirstName = employee.FirstName;
+                emp.ProfilePic = employee.ProfilePic;
+                emp.LastName = employee.LastName;
+                emp.PhoneNumber = employee.PhoneNumber;
+                emp.Dob = employee.Dob;
+                emp.Email = employee.Email;
+                emp.JoiningDate = employee.JoiningDate;
+                emp.ManagerId = employee.ManagerId;
+                emp.ProjectId = employee.ProjectId;
+                emp.RoleDetailId = employee.RoleDetailId;
                 return Save();
+            }
+            return false;
         }
         public bool Save()
         {

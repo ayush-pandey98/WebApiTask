@@ -1,6 +1,6 @@
 ﻿using EmployeeDirectory.BLL.Interface.departmentBL;
 using EmployeeDirectory.DAL.Interface.departmentDAL;
-using EmployeeDirectory.Models.ModelDAL;
+using EmployeeDirectory.Model.ModelDAL;
 using EmployeeDirectory.Models.ModelPresentation;
 
 
@@ -17,7 +17,7 @@ namespace EmployeeDirectory.BLL.Implementation.departmentBL
         {
             Department departmentDAL = new Department()
             {
-                Value = department.Value
+                DepartmentName = department.Value
             };
             return _departmentDAL.Add(departmentDAL);
         }
@@ -25,13 +25,11 @@ namespace EmployeeDirectory.BLL.Implementation.departmentBL
         {
             return _departmentDAL.GetAll();
         }
-        public string GetDepartmentById(int id)
+
+        public int GetDepartmentId(string  departmentName)
         {
-            return _departmentDAL.GetNameById(id);
+            return _departmentDAL.GetDepartmentId(departmentName);
         }
-        public int GetDepartmentId(string department)
-        {
-            return _departmentDAL.GetIdByName(department);
-        }
+        
     }
 }

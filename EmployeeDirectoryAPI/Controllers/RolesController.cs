@@ -1,4 +1,4 @@
-﻿using EmployeeDirectory.Bll.Interface.roleBL;
+﻿using EmployeeDirectory.BLL.Interface;
 using EmployeeDirectory.Models.Presentation.Role;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,29 +8,16 @@ namespace EmployeeDirectoryAPI.Controllers
     [ApiController]
     public class RolesController : Controller
     {
-        private readonly IRoleBL _roleBL;
-        public RolesController(IRoleBL roleBL)
+        private readonly IRoleDetailBL _roleDetailBL;
+        public RolesController(IRoleDetailBL roleDetailBL)
         {
-          _roleBL = roleBL;
+          _roleDetailBL = roleDetailBL;
         }
         [HttpGet]
         public ActionResult GetAllRoles()
         {
-            var roles  =  _roleBL.GetAllRoles();
+            var roles = _roleDetailBL.GetAllRoleDetails();
             return Ok(roles);
-        }
-
-        [HttpGet("{roleId}/RoleId")]
-        public ActionResult GetRoleById(int id)
-        {
-            string role =  _roleBL.GetRoleById(id);
-            return Ok(role);
-        }
-        [HttpGet("{roleName}/RoleName")]
-        public ActionResult GetRoleIdByName(string roleName)
-        {
-            int roleId = _roleBL.GetIdByRole(roleName);
-            return Ok(roleId);
         }
 
         [HttpPost]
@@ -40,13 +27,13 @@ namespace EmployeeDirectoryAPI.Controllers
             {
                 return BadRequest("Role is null.");
             }
-            var rol = _roleBL.GetAllRoles()
-                            .Where(r => r.Name.Trim().ToUpper() == role.Name.Trim().ToUpper() && r.Location.Trim().ToUpper()==role.Location.Trim().ToUpper()).FirstOrDefault();
+            var rol = _roleDetailBL.GetAllRoleDetails()
+                            .Where(r => r.Name.Trim().ToUpper() == role.Name.Trim().ToUpper() && r.LocationId == role.LocationId && r.DepartmentId == role.DepartmentId).FirstOrDefault();
             if (rol != null)
             {
                 return BadRequest("Role already exists");
             }
-            if (!_roleBL.AddRole(role))
+            if (!_roleDetailBL.AddRoleDetail(role))
             {
                 return BadRequest("Something went wrong while saving");
             }

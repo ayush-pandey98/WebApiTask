@@ -2,7 +2,6 @@
 using System.Text;
 using EmployeeDirectory.Models.DtoModels;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 

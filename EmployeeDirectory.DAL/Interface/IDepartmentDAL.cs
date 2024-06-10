@@ -1,4 +1,4 @@
-﻿using EmployeeDirectory.Models.ModelDAL;
+﻿using EmployeeDirectory.Model.ModelDAL;
 
 namespace EmployeeDirectory.DAL.Interface.departmentDAL
 {
@@ -6,7 +6,6 @@ namespace EmployeeDirectory.DAL.Interface.departmentDAL
     {
         public List<Department> GetAll();
         public bool Add(Department department);
-        public string GetNameById(int id);
-        public int GetIdByName(string name);
+        public int GetDepartmentId(string departmentName);
     }
 }

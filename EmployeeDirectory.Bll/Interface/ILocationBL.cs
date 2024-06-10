@@ -1,4 +1,4 @@
-﻿using EmployeeDirectory.Models.ModelDAL;
+﻿using EmployeeDirectory.Model.ModelDAL;
 using EmployeeDirectory.Models.ModelPresentation;
 
 namespace EmployeeDirectory.BLL.Interface.location
@@ -7,7 +7,8 @@ namespace EmployeeDirectory.BLL.Interface.location
     {
         public bool AddLocation(LocationDto location);
         public List<Location> GetAllLocation();
-        string GetLocationById(int id);
-        public int GetLocationId(string location);
+        public string GetLocationById(int id);
+
+        
     }
 }

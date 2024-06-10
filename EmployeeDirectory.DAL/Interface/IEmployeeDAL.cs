@@ -1,4 +1,4 @@
-﻿using EmployeeDirectory.Models.ModelDAL;
+﻿using EmployeeDirectory.Model.ModelDAL;
 
 namespace EmployeeDirectory.DAL.Interface.employeeDAL
 {

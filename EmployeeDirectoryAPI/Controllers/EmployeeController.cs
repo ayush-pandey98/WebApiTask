@@ -1,5 +1,5 @@
 ﻿using EmployeeDirectory.BLL.Interface.employeeBL;
-using EmployeeDirectory.Models.ModelDAL;
+using EmployeeDirectory.Model.ModelDAL;
 using EmployeeDirectory.Models.Presentation.Employee;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,7 +15,7 @@ namespace EmployeeDirectoryAPI.Controllers
         {
             _employeeBL = employeeBL;
         }
-        [Authorize]
+      
         [HttpGet]
         public ActionResult GetAllEmployee() {
             var employees = _employeeBL.GetAllEmployees();
@@ -28,7 +28,7 @@ namespace EmployeeDirectoryAPI.Controllers
             return Ok(employee);
         }
         [HttpPost]
-        public IActionResult AddEmployee([FromBody] Employee employee)
+        public IActionResult AddEmployee([FromBody] EmployeeDto employee)
         {
             if (employee == null)
             {
